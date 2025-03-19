@@ -1,0 +1,32 @@
+.container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+  }
+  
+  .header {
+    background-color: #222;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .nav {
+    margin: 20px 0;
+  }
+  
+  .main {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+  }
+  
+  .footer {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #222;
+    color: white;
+    border-radius: 8px;
+  }
+  
