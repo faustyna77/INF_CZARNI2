@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<sim-project version="14.00" multi-file="no" uid="simp33f7cce75bb642859b94f79fad7233d7" creation-date="03/18/2025 14:06:00">
+  <meta>
+    <name>GUI_realizacja_nowego_zlecenia</name>
+    <authors> Student</authors>
+    <description />
+  </meta>
+  <counters models="1">
+    <entity-names>
+      <counter>
+        <item-type type-id="ui-window" type="Window" />
+        <value>1</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-button" type="Button" />
+        <value>1</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-panel" type="Panel" />
+        <value>1</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-area" type="Area" />
+        <value>1</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-text-box" type="Text Box" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-label" type="Label" />
+        <value>1</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-check-box" type="Check Box" />
+        <value>1</value>
+      </counter>
+    </entity-names>
+    <entity-ids>
+      <counter>
+        <item-type type-id="ui-window" type="Window" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-button" type="Button" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-panel" type="Panel" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-area" type="Area" />
+        <value>3</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-text-box" type="Text Box" />
+        <value>3</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-label" type="Label" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="detail-expansion" type="Detail Expansion" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-check-box" type="Check Box" />
+        <value>2</value>
+      </counter>
+    </entity-ids>
+    <diagrams>
+      <counter>
+        <type>SoftwareIdeasModeler.Core.Diagrams.Wireframing.UserInterfaceDiagram</type>
+        <value>1</value>
+      </counter>
+    </diagrams>
+    <fields />
+  </counters>
+  <alias-groups />
+  <management uid="md-7508310303a0445f9fb7e798f2f7074a" name="" task-id-sequence="0">
+    <working-schedule uid="ws-8dd559b578af4e25bbbb6da76413d522" hours="8" monday="8" tuesday="8" wednesday="8" thursday="8" friday="8" saturday="0" sunday="0" />
+    <persons>
+      <person id="">
+        <first-name />
+        <last-name />
+        <role />
+        <e-mail />
+        <phone-number />
+        <description />
+        <color>#00000000</color>
+        <working-schedule uid="ws-e02ab79cb56444c8a4d75f380fc9e0ee" hours="8" monday="8" tuesday="8" wednesday="8" thursday="8" friday="8" saturday="0" sunday="0" />
+      </person>
+      <person id="">
+        <first-name />
+        <last-name>Student</last-name>
+        <role />
+        <e-mail />
+        <phone-number />
+        <description />
+        <color>#00000000</color>
+      </person>
+    </persons>
+    <teams />
+    <sprints />
+    <projects />
+    <modules />
+    <tasks />
+    <to-dos />
+  </management>
+  <glossary id="glsr-65fa1ef8d5f6443ea8f61ba5fdf519eb" name="" order-index="-1" />
+  <types default="UML">
+    <type-sets>
+      <type-set file="UmlTypes.xml" />
+    </type-sets>
+    <custom-types>
+      <parameters />
+      <types />
+    </custom-types>
+  </types>
+  <items>
+    <item id="9989cfd3fa354725a3ed0e23703466e8" cid="TXT001" type="ui-text-box" name="Dane osoby zmarłej" style-class="Flat Blue" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:22:34">
+      <style class="Flat Blue" />
+      <text-box />
+    </item>
+    <item id="196f4bb013b247ee88b5a4eeb84d3598" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:27:53">
+      <text-box />
+    </item>
+    <item id="6c8b969a6e874b0d88b6f9d6184917e6" cid="LBL001" type="ui-label" name="nazwisko" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:26:14" />
+    <item id="a1ccdbb3800a4dfcb508ed628393d510" cid="CHB001" type="ui-check-box" name="zakup trumny" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:42:20">
+      <check-box state="Checked" />
+    </item>
+    <item id="3c77e5f20916474b9b0462a575d68381" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:27:53">
+      <text-box />
+    </item>
+    <item id="f7d9fe33f72a4dc0aa6e4e3a45c6a620" cid="LBL001" type="ui-label" name="numer telefonu" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:26:14" />
+    <item id="a527377deada4c38a649e2a05575f253" cid="LBL001" type="ui-label" name="imie " owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:26:14" />
+    <item id="3175076981834ac887384cc66f1c0677" cid="LBL001" type="ui-label" name="adres zamieszkania " owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:26:14" />
+    <item id="e66aad4b7ca74684ab46a1271d5139ac" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:27:53">
+      <text-box />
+    </item>
+    <item id="88dd85b2ad3b43d1ba4176306011bb7a" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:27:53">
+      <text-box />
+    </item>
+    <item id="b510bb70e1c14065a6287620d0b37dc2" cid="LBL001" type="ui-label" name="nazwisko" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:26:14" />
+    <item id="106e7b2fbe6b4496969313f99675869d" cid="LBL001" type="ui-label" name="numer aktu zgonu" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:26:14" />
+    <item id="d351b6608f9b46beaa811610fdf142dd" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:27:53">
+      <text-box />
+    </item>
+    <item id="37bdf920a5df463093a8a84468f702e5" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:27:53">
+      <text-box />
+    </item>
+    <item id="038f71d930d84f3d8bf9fe9f5f21f386" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:27:53">
+      <text-box />
+    </item>
+    <item id="01eb99af84df461aa0ff871fa5672af6" cid="LBL001" type="ui-label" name="data zgonu" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:26:14" />
+    <item id="b5c74d1e10ce425c95d52d515c1280e5" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:27:53">
+      <text-box />
+    </item>
+    <item id="7eb31e783a534fd1b2b307e0afdbefd8" cid="LBL001" type="ui-label" name="adres e-mail" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:26:14" />
+    <item id="79a050d8a9b347acafd11f321c5584bc" cid="CHB001" type="ui-check-box" name="ceremonia pochówku" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:42:20">
+      <check-box state="Checked" />
+    </item>
+    <item id="1325c26fce3944efb22db3b779c91856" cid="LBL001" type="ui-label" name="data urodzenia" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:26:14" />
+    <item id="2f5450dec64e498288589bb1b965acf5" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:27:53">
+      <text-box />
+    </item>
+    <item id="d9a65604c2e54071ae074b915e5236b1" cid="TXT001" type="ui-text-box" name="Usługi" style-class="Flat Blue" owner="eeb214a7e512426f926ab8ac4071dd9f" creation-date="03/18/2025 15:22:34">
+      <style class="Flat Blue" />
+      <text-box />
+    </item>
+  </items>
+  <models>
+    <model id="pc7b8a1b0f5464689b3f09e4b1fdbafcb_386309998" name="Model1" namespace="" order-index="1">
+      <meta>
+        <authors>
+          <author> </author>
+        </authors>
+        <description />
+        <creation-date>03/18/2025 14:06:21</creation-date>
+        <change-date>01/01/0001 00:00:00</change-date>
+        <revision-count>0</revision-count>
+        <version />
+      </meta>
+      <abstract-items />
+      <sub-models />
+      <diagram type="user-interface" id="p2147f64471a84c29b32dd5e4ccfed74c_614173045" name="UserInterfaceDiagram1" order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default">
+        <style>
+          <background-color index="1" color="#FFFFFFFF" />
+          <background-color index="2" color="#FFFFFFFF" />
+          <background-type type="solid" />
+        </style>
+        <meta>
+          <authors>
+            <author> </author>
+          </authors>
+          <description />
+          <creation-date>03/18/2025 14:06:21</creation-date>
+          <change-date>03/18/2025 15:42:36</change-date>
+          <revision-count>0</revision-count>
+          <version />
+        </meta>
+        <abstract-items>
+          <item id="ac337214616241fd97669271644f51c8" cid="ELEM002" type="ui-area" name="dane klienta" owner="eeb214a7e512426f926ab8ac4071dd9f" creator="" creation-date="03/18/2025 15:22:17" />
+          <item id="71daf6cd8f7b4d8082f41db830d65af6" cid="TXT001" type="ui-text-box" name="Dane klienta" style-class="Flat Blue" owner="eeb214a7e512426f926ab8ac4071dd9f" creator="" creation-date="03/18/2025 15:22:34">
+            <style class="Flat Blue" />
+            <text-box />
+          </item>
+          <item id="eeb214a7e512426f926ab8ac4071dd9f" cid="WND001" type="ui-window" name="Realizacja nowego zlecenia przez recepcje" creator="" creation-date="03/18/2025 14:06:28">
+            <owned-items />
+            <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
+          </item>
+          <item id="dbbcaeff4cd54a8a923f8dabe88cac63" cid="ELEM001" type="ui-panel" name="Dane " owner="eeb214a7e512426f926ab8ac4071dd9f" creator="" creation-date="03/18/2025 14:16:22" />
+          <item id="5996873b62e84fc3b7953d7f2e6138d5" cid="BTN001" type="ui-button" name="DODAJ " style-class="Flat Cyan" owner="eeb214a7e512426f926ab8ac4071dd9f" creator="" creation-date="03/18/2025 14:16:05">
+            <style class="Flat Cyan" />
+            <button />
+          </item>
+          <item id="594398f9bb0e4d9fa2ef2421ea399319" cid="TXT002" type="ui-text-box" owner="eeb214a7e512426f926ab8ac4071dd9f" creator="" creation-date="03/18/2025 15:27:53">
+            <text-box />
+          </item>
+          <item id="f2d43f39d38e487fbe0ec3f80486ca85" cid="CHB001" type="ui-check-box" name="odebranie ciała przez zakład" owner="eeb214a7e512426f926ab8ac4071dd9f" creator="" creation-date="03/18/2025 15:42:20">
+            <check-box state="Checked" />
+          </item>
+          <item id="660936c64f7b46cd9c0831be23b75466" cid="LBL001" type="ui-label" name="imie " owner="eeb214a7e512426f926ab8ac4071dd9f" creator="" creation-date="03/18/2025 15:26:14" />
+        </abstract-items>
+        <layer id="f1d8c40c47d24d49873d5ba669aa9e87" name="Default" visible="true" enabled="true" locked="false">
+          <item id="eeb214a7e512426f926ab8ac4071dd9f" iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 14:06:28" order-index="0" type="ui-window">
+            <layout ax="187" ay="67" awidth="958" aheight="664" x="187" y="67" width="958" height="664" expanded="187,67,958,664" collapsed="0,0,0,0" />
+          </item>
+          <item id="71daf6cd8f7b4d8082f41db830d65af6" iid="2aaea57f218844149aaadbb76ad76510" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:22:34" order-index="2" type="ui-text-box">
+            <layout ax="208" ay="148" awidth="150" aheight="36" x="153" y="149" width="150" height="20" />
+          </item>
+          <item id="660936c64f7b46cd9c0831be23b75466" iid="6153ce750f9447aa8bc81b2a9e2ba46b" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="3" type="ui-label">
+            <layout ax="208" ay="194" awidth="86" aheight="36" x="153" y="195" width="86" height="20" />
+          </item>
+          <item id="594398f9bb0e4d9fa2ef2421ea399319" iid="1a3d64fc42824a2690f2c81ee1de18c5" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="4" type="ui-text-box">
+            <layout ax="317" ay="194" awidth="150" aheight="36" x="262" y="195" width="150" height="20" />
+          </item>
+          <item id="5996873b62e84fc3b7953d7f2e6138d5" iid="fa940a2cd031443999c9b29ffc97a375" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 14:16:05" order-index="1" type="ui-button">
+            <layout ax="764" ay="612" awidth="301" aheight="61" x="389" y="566" width="301" height="61" />
+          </item>
+          <item id="b510bb70e1c14065a6287620d0b37dc2" iid="fbf4374d5b03409c8346e74093aa38de" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="0" type="ui-label">
+            <layout ax="208" ay="240" awidth="86" aheight="36" x="153" y="241" width="86" height="20" />
+          </item>
+          <item id="2f5450dec64e498288589bb1b965acf5" iid="b690cd18b2c0420cbd79d3dcf01074c1" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="0" type="ui-text-box">
+            <layout ax="317" ay="240" awidth="150" aheight="36" x="262" y="241" width="150" height="20" />
+          </item>
+          <item id="f7d9fe33f72a4dc0aa6e4e3a45c6a620" iid="1caa8962de7d45499b1ee2a4ccf3ee86" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="0" type="ui-label">
+            <layout ax="208" ay="286" awidth="127" aheight="36" x="153" y="287" width="86" height="20" />
+          </item>
+          <item id="d351b6608f9b46beaa811610fdf142dd" iid="7f6fd6238a4c4c7aba3b33937c662e23" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="0" type="ui-text-box">
+            <layout ax="335" ay="286" awidth="150" aheight="36" x="280" y="287" width="150" height="20" />
+          </item>
+          <item id="7eb31e783a534fd1b2b307e0afdbefd8" iid="a116342bda59442b8199fc09e54ca3d2" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="0" type="ui-label">
+            <layout ax="208" ay="349" awidth="127" aheight="36" x="153" y="350" width="86" height="20" />
+          </item>
+          <item id="196f4bb013b247ee88b5a4eeb84d3598" iid="1c2e239fbc6542be9c819c2d37622acf" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="0" type="ui-text-box">
+            <layout ax="335" ay="349" awidth="150" aheight="36" x="280" y="350" width="150" height="20" />
+          </item>
+          <item id="9989cfd3fa354725a3ed0e23703466e8" iid="2f5b15e5ff78438491d5b17362bfb35c" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:22:34" order-index="0" type="ui-text-box">
+            <layout ax="599" ay="148" awidth="150" aheight="36" x="544" y="149" width="150" height="20" />
+          </item>
+          <item id="3175076981834ac887384cc66f1c0677" iid="f37fcd87c3b44168a020d2898b3be3c8" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="0" type="ui-label">
+            <layout ax="208" ay="412" awidth="154" aheight="36" x="153" y="413" width="86" height="20" />
+          </item>
+          <item id="a527377deada4c38a649e2a05575f253" iid="6142a254c0de43be8dd24978cab9bfa1" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="0" type="ui-label">
+            <layout ax="573" ay="194" awidth="86" aheight="36" x="518" y="195" width="86" height="20" />
+          </item>
+          <item id="b5c74d1e10ce425c95d52d515c1280e5" iid="9e572f7846674144bf7d19da97b0d668" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="0" type="ui-text-box">
+            <layout ax="362" ay="412" awidth="150" aheight="36" x="307" y="413" width="150" height="20" />
+          </item>
+          <item id="e66aad4b7ca74684ab46a1271d5139ac" iid="0177e6cf103d40c4af4ca23a92af1bf5" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="0" type="ui-text-box">
+            <layout ax="641" ay="194" awidth="150" aheight="36" x="586" y="195" width="150" height="20" />
+          </item>
+          <item id="88dd85b2ad3b43d1ba4176306011bb7a" iid="175d57c6045c403090eb0aab998e6b83" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="0" type="ui-text-box">
+            <layout ax="641" ay="240" awidth="150" aheight="36" x="586" y="241" width="150" height="20" />
+          </item>
+          <item id="6c8b969a6e874b0d88b6f9d6184917e6" iid="7393ac508f8b4e0aa4eaabeef9e646f1" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="0" type="ui-label">
+            <layout ax="555" ay="240" awidth="86" aheight="36" x="500" y="241" width="86" height="20" />
+          </item>
+          <item id="1325c26fce3944efb22db3b779c91856" iid="a2aa467ee74f4b138c454a9d3df398aa" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="0" type="ui-label">
+            <layout ax="534.5" ay="299.5" awidth="127" aheight="36" x="479.5" y="300.5" width="86" height="20" />
+          </item>
+          <item id="3c77e5f20916474b9b0462a575d68381" iid="f10f3a81527c429ab044688023b5bf53" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="0" type="ui-text-box">
+            <layout ax="661.5" ay="299.5" awidth="150" aheight="36" x="286.5" y="253.5" width="150" height="20" />
+          </item>
+          <item id="01eb99af84df461aa0ff871fa5672af6" iid="782917391871479bb78bcd571969249b" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="0" type="ui-label">
+            <layout ax="534.5" ay="349" awidth="127" aheight="36" x="479.5" y="350" width="86" height="20" />
+          </item>
+          <item id="106e7b2fbe6b4496969313f99675869d" iid="b8bf36cac46b42f9ae0c08a34a4a5648" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:26:14" order-index="0" type="ui-label">
+            <layout ax="513.5" ay="384" awidth="148" aheight="36" x="138.5" y="338" width="86" height="20" />
+          </item>
+          <item id="37bdf920a5df463093a8a84468f702e5" iid="186b7265f1774ed3a603487f3ac07f45" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="0" type="ui-text-box">
+            <layout ax="661.5" ay="395.5" awidth="150" aheight="36" x="286.5" y="349.5" width="150" height="20" />
+          </item>
+          <item id="038f71d930d84f3d8bf9fe9f5f21f386" iid="38f84faac1c44e80baee4955ea765ef7" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:27:53" order-index="0" type="ui-text-box">
+            <layout ax="661.5" ay="347" awidth="150" aheight="36" x="606.5" y="348" width="150" height="20" />
+          </item>
+          <item id="f2d43f39d38e487fbe0ec3f80486ca85" iid="a901e0850f404a68a422e36d62b5fbc0" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:42:20" order-index="5" type="ui-check-box">
+            <layout ax="885.375" ay="212" awidth="235.25" aheight="36" x="510.375" y="166" width="150" height="20" />
+          </item>
+          <item id="a1ccdbb3800a4dfcb508ed628393d510" iid="ef6914c4186c4120a7d385d072b830d8" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:42:20" order-index="0" type="ui-check-box">
+            <layout ax="885.375" ay="269" awidth="235" aheight="36" x="510.375" y="223" width="150" height="20" />
+          </item>
+          <item id="d9a65604c2e54071ae074b915e5236b1" iid="aa2a359c96584c4398ff638ed9b375d7" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:22:34" order-index="0" type="ui-text-box">
+            <layout ax="915" ay="137" awidth="150" aheight="36" x="540" y="91" width="150" height="20" />
+          </item>
+          <item id="79a050d8a9b347acafd11f321c5584bc" iid="b690e4c5fc1249cb90f5de98c7e09e59" container="eeb214a7e512426f926ab8ac4071dd9f" container-iid="dacf4b35ed1d43cdbfe4f86c4f542dd5" creation-date="03/18/2025 15:42:20" order-index="0" type="ui-check-box">
+            <layout ax="885.375" ay="317.5" awidth="235" aheight="36" x="510.375" y="271.5" width="150" height="20" />
+          </item>
+        </layer>
+      </diagram>
+    </model>
+  </models>
+</sim-project>
