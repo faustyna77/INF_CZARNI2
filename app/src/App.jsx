@@ -44,6 +44,7 @@ const App = () => {
       </header>
       <nav style={styles.nav}>
         <ul>
+          <li><Link to="/recepcionist">Dla recepcjonisty</Link></li>
           <li><Link to="/log">Logowanie</Link></li>
           <li><Link to="/admin">Panel administratora</Link></li>
           <li><Link to="/o-nas">O Nas</Link></li>

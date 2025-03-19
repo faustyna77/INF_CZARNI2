@@ -3,20 +3,18 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 
-import  Profile  from "./Profile";
-
 import Log from "./Log";
 
 import Admin from "./Admin";
+
+import Recepcionist  from "./Recepcionist";
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
   },
-  {
-    path: "profile",
-    element: <Profile />,
-  },
+
   {
     path: "log",
     element: <Log />,
@@ -25,6 +23,11 @@ const router = createBrowserRouter([
     path: "admin",
     element: <Admin />,
   },
+  {
+    path: "recepcionist",
+    element: <Recepcionist />,
+  },
+
   {
     path: "*", // Fallback dla nieznanych ścieżek
     element: <h1>404 - Strona nie istnieje</h1>,
