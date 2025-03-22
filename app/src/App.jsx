@@ -32,21 +32,43 @@ export default function App() {
 
 
 */
+/*
 import { Link } from "react-router-dom";
 
 
 const App = () => {
+  const [token, setToken] = useState(null);
+
+  // Sprawdzanie tokena przy załadowaniu aplikacji
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Usuwamy token
+    setToken(null); // Resetujemy stan
+  };
+
   return (
+    <>
+    <Log setToken={setToken} />
+   
+    
     <div style={styles.container}>
       <header style={styles.header}>
+
         <h1>Zakład Pogrzebowy "Wieczny Spokój"</h1>
         <p>Godne pożegnanie, profesjonalna obsługa, wsparcie w trudnych chwilach.</p>
       </header>
       <nav style={styles.nav}>
         <ul>
+          
           <li><Link to="/log">Logowanie</Link></li>
           <li><Link to="/admin">Panel administratora</Link></li>
           <li><Link to="/o-nas">O Nas</Link></li>
+          <button onClick={handleLogout}>Wyloguj</button>
         </ul>
       </nav>
       <main style={styles.main}>
@@ -62,9 +84,10 @@ const App = () => {
         </section>
       </main>
       <footer style={styles.footer}>
-        <p>&copy; 2024 Zakład Pogrzebowy "Wieczny Spokój". Wszelkie prawa zastrzeżone.</p>
+        <p>&copy; 2025 Zakład Pogrzebowy "Wieczny Spokój". Wszelkie prawa zastrzeżone.</p>
       </footer>
     </div>
+    </>
   );
 };
 
@@ -96,7 +119,104 @@ const styles = {
     color: "white",
     borderRadius: "8px",
   },
+  
 };
 
 export default App;
 
+*/
+
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
+const App = () => {
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+  };
+
+  return (
+    <div style={styles.container}>
+      <nav style={styles.nav}>
+        <Link style={styles.link} to="/">🏠 Home</Link>
+        {token && <Link style={styles.link} to="/profile">👤 Profile</Link>}
+        {token && <Link style={styles.link} to="/admin">⚙️ Admin Panel</Link>}
+        {!token && <Link style={styles.link} to="/log">🔐 Logowanie</Link>}
+        {token && (
+          <button style={styles.button} onClick={handleLogout}>🚪 Wyloguj</button>
+        )}
+      </nav>
+
+      <main style={styles.main}>
+        <h1 style={styles.heading}>Aplikacja zakładu pogrzebowego — Wieczny Spokój</h1>
+        {token ? (
+          <p style={styles.text}>Zalogowano ✅</p>
+        ) : (
+          <p style={styles.text}>
+            Nie jesteś zalogowany. Przejdź do{" "}
+            <Link to="/log" style={styles.linkInline}>logowania</Link>.
+          </p>
+        )}
+      </main>
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    backgroundColor: "#121212",
+    color: "#f0f0f0",
+    minHeight: "100vh",
+    fontFamily: "Arial, sans-serif",
+  },
+  nav: {
+    display: "flex",
+    gap: "15px",
+    padding: "20px",
+    backgroundColor: "#1e1e1e",
+    borderBottom: "1px solid #333",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  link: {
+    color: "#bb86fc",
+    textDecoration: "none",
+    fontWeight: "bold",
+  },
+  linkInline: {
+    color: "#03dac6",
+    textDecoration: "underline",
+  },
+  button: {
+    backgroundColor: "#cf6679",
+    color: "#fff",
+    border: "none",
+    padding: "8px 16px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontWeight: "bold",
+  },
+  main: {
+    padding: "50px",
+    textAlign: "center",
+  },
+  heading: {
+    fontSize: "2.5rem",
+    marginBottom: "10px",
+  },
+  text: {
+    fontSize: "1.2rem",
+    color: "#aaa",
+  },
+};
+
+export default App;
