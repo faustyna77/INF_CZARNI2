@@ -1,7 +1,9 @@
-package zaklad.pogrzebowy.api;
+package zaklad.pogrzebowy.api.services;
 
 
 
+
+import zaklad.pogrzebowy.api.models.Client;
 
 import java.util.List;
 

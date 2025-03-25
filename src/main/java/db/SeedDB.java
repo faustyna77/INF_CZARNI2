@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import zaklad.pogrzebowy.api.Client;
-import zaklad.pogrzebowy.api.ClientService;
+import zaklad.pogrzebowy.api.models.Client;
+import zaklad.pogrzebowy.api.services.ClientService;
 
 import java.util.List;
 

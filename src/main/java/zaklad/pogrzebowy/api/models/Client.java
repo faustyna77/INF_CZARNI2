@@ -1,4 +1,4 @@
-package zaklad.pogrzebowy.api;
+package zaklad.pogrzebowy.api.models;
 
 
 

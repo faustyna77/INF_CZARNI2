@@ -1,11 +1,12 @@
-package zaklad.pogrzebowy.api;
+package zaklad.pogrzebowy.api.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import zaklad.pogrzebowy.api.models.Client;
+import zaklad.pogrzebowy.api.repositories.ClientRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClientService implements IClientService {

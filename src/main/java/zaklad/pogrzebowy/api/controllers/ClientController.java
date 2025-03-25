@@ -1,4 +1,4 @@
-package zaklad.pogrzebowy.api;
+package zaklad.pogrzebowy.api.controllers;
 
 
 
@@ -6,9 +6,10 @@ package zaklad.pogrzebowy.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import zaklad.pogrzebowy.api.services.ClientService;
+import zaklad.pogrzebowy.api.models.Client;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/clients") // Ustalona ścieżka bazowa dla API klientów
