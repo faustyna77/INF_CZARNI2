@@ -1,35 +1,70 @@
-import { StrictMode, useState, useEffect } from "react";
-import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./App";
-import Profile from "./Profile";
-import Log from "./Log";
-import Admin from "./Admin";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate
+} from 'react-router-dom';
 
-// 🔧 Komponent z tokenem globalnym
-const Root = () => {
-  const [token, setToken] = useState(null);
+// Import layoutu
+import RootLayout from './layouts/RootLayout';
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+// Import stron
+import Profile from './pages/Profile';
+import Login from './pages/Login';
+import Admin from './pages/Admin';
+import TaskPlans from './pages/TaskPlans';
+import NotFound from './components/NotFound';
 
-  const router = createBrowserRouter([
-    { path: "/", element: <App token={token} setToken={setToken} /> },
-    { path: "/profile", element: <Profile token={token} /> },
-    { path: "/log", element: <Log setToken={setToken} /> },
-    { path: "/admin", element: <Admin token={token} /> },
-    { path: "*", element: <h1>404 - Strona nie istnieje</h1> },
-  ]);
-
-  return <RouterProvider router={router} />;
+// Prosty komponent zabezpieczający trasy
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  return token ? children : <Navigate to="/login" replace />;
 };
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <Root />
-  </StrictMode>
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RootLayout />,
+    children: [
+      {
+        path: 'profile',
+        element: (
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+        )
+      },
+      {
+        path: 'tasks',
+        element: (
+            <ProtectedRoute>
+              <TaskPlans />
+            </ProtectedRoute>
+        )
+      },
+      {
+        path: 'admin',
+        element: (
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+        )
+      }
+    ]
+  },
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '*',
+    element: <NotFound />
+  }
+]);
+
+createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
 );
