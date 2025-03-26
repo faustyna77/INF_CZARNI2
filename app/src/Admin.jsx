@@ -1,11 +1,12 @@
-const Admin = () => {
-    return (
-      <div>
-        <h1>Hello from log page!</h1>
-        <p>So, how are you?</p>
-      </div>
-    );
-  };
-  
-  export default Admin;
-  
+import Navigation from "./Navigation";
+
+const Admin = ({ token, handleLogout }) => {
+  return (
+    <div>
+      <Navigation token={token} handleLogout={handleLogout} />
+      {/* reszta panelu admina */}
+    </div>
+  );
+};
+
+export default Admin;

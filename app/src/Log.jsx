@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Log = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // 👈 dodane
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,6 +19,7 @@ const Log = ({ setToken }) => {
       setToken(token);
       localStorage.setItem("token", token);
       alert("Zalogowano pomyślnie!");
+      navigate("/"); // 👈 przekierowanie po zalogowaniu
     } catch (error) {
       console.error("Błąd logowania:", error);
       alert("Nieprawidłowy login lub hasło!");

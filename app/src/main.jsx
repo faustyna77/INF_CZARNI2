@@ -5,6 +5,9 @@ import App from "./App";
 import Profile from "./Profile";
 import Log from "./Log";
 import Admin from "./Admin";
+import Raports from "./Raports";
+import TaskPlans from "./TaskPlans";
+import Recepcionist from "./Recepcionist";
 
 // 🔧 Komponent z tokenem globalnym
 const Root = () => {
@@ -22,6 +25,9 @@ const Root = () => {
     { path: "/profile", element: <Profile token={token} /> },
     { path: "/log", element: <Log setToken={setToken} /> },
     { path: "/admin", element: <Admin token={token} /> },
+    { path: "/tasks", element: <TaskPlans token={token} /> },
+    { path: "/raports", element: <Raports token={token} /> },
+    { path: "/recepcionist", element: <Recepcionist token={token} /> },
     { path: "*", element: <h1>404 - Strona nie istnieje</h1> },
   ]);
 

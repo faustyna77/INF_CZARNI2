@@ -127,6 +127,7 @@ export default App;
 */
 
 import { useState, useEffect } from "react";
+import Navigation from "./Navigation"; 
 import { Link } from "react-router-dom";
 
 const App = () => {
@@ -134,9 +135,7 @@ const App = () => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
+    if (storedToken) setToken(storedToken);
   }, []);
 
   const handleLogout = () => {
@@ -146,15 +145,7 @@ const App = () => {
 
   return (
     <div style={styles.container}>
-      <nav style={styles.nav}>
-        <Link style={styles.link} to="/">🏠 Home</Link>
-        {token && <Link style={styles.link} to="/profile">👤 Profile</Link>}
-        {token && <Link style={styles.link} to="/admin">⚙️ Admin Panel</Link>}
-        {!token && <Link style={styles.link} to="/log">🔐 Logowanie</Link>}
-        {token && (
-          <button style={styles.button} onClick={handleLogout}>🚪 Wyloguj</button>
-        )}
-      </nav>
+      <Navigation token={token} handleLogout={handleLogout} />
 
       <main style={styles.main}>
         <h1 style={styles.heading}>Aplikacja zakładu pogrzebowego — Wieczny Spokój</h1>
@@ -178,33 +169,6 @@ const styles = {
     minHeight: "100vh",
     fontFamily: "Arial, sans-serif",
   },
-  nav: {
-    display: "flex",
-    gap: "15px",
-    padding: "20px",
-    backgroundColor: "#1e1e1e",
-    borderBottom: "1px solid #333",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  link: {
-    color: "#bb86fc",
-    textDecoration: "none",
-    fontWeight: "bold",
-  },
-  linkInline: {
-    color: "#03dac6",
-    textDecoration: "underline",
-  },
-  button: {
-    backgroundColor: "#cf6679",
-    color: "#fff",
-    border: "none",
-    padding: "8px 16px",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontWeight: "bold",
-  },
   main: {
     padding: "50px",
     textAlign: "center",
@@ -216,6 +180,10 @@ const styles = {
   text: {
     fontSize: "1.2rem",
     color: "#aaa",
+  },
+  linkInline: {
+    color: "#03dac6",
+    textDecoration: "underline",
   },
 };
 
