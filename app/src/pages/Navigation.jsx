@@ -9,6 +9,7 @@ const Navigation = ({ token, handleLogout }) => {
       {token && <Link style={styles.link} to="/raports">📊 Raporty</Link>}
       {token && <Link style={styles.link} to="/recepcionist">📊 Recepcja</Link>}
       {token && <Link style={styles.link} to="/tasks">📋 Zadania</Link>}
+      
       {!token && <Link style={styles.link} to="/log">🔐 Logowanie</Link>}
       {token && (
         <button style={styles.button} onClick={handleLogout}>🚪 Wyloguj</button>

@@ -3,10 +3,13 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./pages/App";
 import Profile from "./pages/Profile";
+import Raports from "./pages/Raports.jsx";
 import Log from "./pages/Log";
 import Admin from "./pages/admin-panel/Admin.jsx";
 import RootLayout from "./layouts/RootLayout.jsx";
 import './index.css';
+import TaskPlans from "./pages/TaskPlans.jsx";
+import Recepcionist from "./pages/Recepcionist.jsx";
 
 // 🔧 Komponent z tokenem globalnym
 const Root = () => {
@@ -35,6 +38,18 @@ const Root = () => {
         {
           path: "/admin",
           element: <Admin token={token} />
+        },
+        {
+          path: "/raports",
+          element: <Raports token={token} />
+        },
+        {
+          path: "/tasks",
+          element: <TaskPlans token={token} />
+        },
+        {
+          path: "/recepcionist",
+          element: <Recepcionist token={token} />
         },
       ]
     },
