@@ -11,13 +11,15 @@ import zaklad.pogrzebowy.api.repositories.ClientRepository;
 import zaklad.pogrzebowy.api.repositories.OrderRepository;
 import zaklad.pogrzebowy.api.repositories.TaskRepository;
 import zaklad.pogrzebowy.api.repositories.UserRepository;
+import java.time.LocalDateTime;
+
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 @Component
-public class DataInitializer implements InitializingBean {
+public class SeedDB implements InitializingBean {
 
     @Autowired
     private ClientRepository clientRepository;
@@ -30,6 +32,9 @@ public class DataInitializer implements InitializingBean {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -50,7 +55,7 @@ public class DataInitializer implements InitializingBean {
         clients.forEach(clientRepository::save);
 
         // Dodajemy przykładowe zamówienia
-        List<Order> orders = createOrders(clients);
+        List<Order> orders = createOrders(clients, users);
         orders.forEach(orderRepository::save);
 
         // Dodajemy przykładowe zadania
@@ -62,9 +67,13 @@ public class DataInitializer implements InitializingBean {
 
     private List<User> createUsers() {
         return Arrays.asList(
-                new User("admin", "admin@pogrzeb.pl", "haslo123", "ADMIN"),
-                new User("pracownik1", "prac1@pogrzeb.pl", "haslo123", "EMPLOYEE"),
-                new User("pracownik2", "prac2@pogrzeb.pl", "haslo123", "EMPLOYEE")
+                new User("Faustyna", "Misiura", "faustyna@zaklad.pl", passwordEncoder.encode("admin"), User.Role.ADMIN),
+                new User("Michał", "Dyjak", "michal@zaklad.pl", passwordEncoder.encode("admin"), User.Role.ADMIN),
+                new User("Mateusz", "Hołyszko", "mateusz_h@zaklad.pl", passwordEncoder.encode("admin"), User.Role.ADMIN),
+                new User("Mateusz", "Florian", "mateusz_f@zaklad.pl", passwordEncoder.encode("admin"), User.Role.ADMIN),
+                new User("Pracownik", "Pierwszy", "prac1@zaklad.pl", passwordEncoder.encode("user"), User.Role.USER),
+                new User("Pracownik", "Drugi", "prac2@zaklad.pl", passwordEncoder.encode("user"), User.Role.USER),
+                new User("Pracownik", "Trzeci", "prac3@zaklad.pl", passwordEncoder.encode("user"), User.Role.USER)
         );
     }
 
@@ -78,23 +87,58 @@ public class DataInitializer implements InitializingBean {
         );
     }
 
-    private List<Order> createOrders(List<Client> clients) {
-        // Tutaj musisz dostosować do swojej definicji klasy Order
-        // Przykładowa implementacja (do dostosowania):
+    private List<Order> createOrders(List<Client> clients, List<User> users) {
         return Arrays.asList(
-                new Order(clients.get(0), /* inne parametry */),
-                new Order(clients.get(1), /* inne parametry */),
-                new Order(clients.get(2), /* inne parametry */)
+                new Order(
+                        "Michalina", "Kot",
+                        Order.Status.pending,
+                        users.get(1)
+                ),
+                new Order(
+                        "Agnieszka", "Włos",
+                        Order.Status.completed,
+                        users.get(2)
+                ),
+                new Order(
+                        "Tatiana", "Kieliszek",
+                        Order.Status.canceled,
+                        users.get(1)
+                )
         );
     }
 
     private List<Task> createTasks(List<Order> orders, List<User> users) {
-        // Tutaj musisz dostosować do swojej definicji klasy Task
-        // Przykładowa implementacja (do dostosowania):
         return Arrays.asList(
-                new Task(orders.get(0), users.get(1), /* inne parametry */),
-                new Task(orders.get(0), users.get(2), /* inne parametry */),
-                new Task(orders.get(1), users.get(1), /* inne parametry */)
+                new Task(
+                        "Transport ciała",
+                        "Transport ciała z domu do chłodni",
+                        Task.Status.in_progress,
+                        Task.Priority.high,
+                        LocalDateTime.now().plusDays(1),
+                        LocalDateTime.now().minusHours(2),
+                        LocalDateTime.now().minusHours(1),
+                        orders.get(0)
+                ),
+                new Task(
+                        "Zamówienie trumny",
+                        "Zamówienie trumny standardowej",
+                        Task.Status.pending,
+                        Task.Priority.medium,
+                        LocalDateTime.now().plusDays(2),
+                        LocalDateTime.now().minusHours(4),
+                        LocalDateTime.now().minusHours(1),
+                        orders.get(0)
+                ),
+                new Task(
+                        "Organizacja ceremonii",
+                        "Rezerwacja kaplicy i księdza",
+                        Task.Status.completed,
+                        Task.Priority.high,
+                        LocalDateTime.now().plusDays(3),
+                        LocalDateTime.now().minusDays(1),
+                        LocalDateTime.now(),
+                        orders.get(1)
+                )
         );
     }
 }

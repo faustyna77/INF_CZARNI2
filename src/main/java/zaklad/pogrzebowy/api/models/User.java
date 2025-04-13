@@ -50,7 +50,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.passwordHash = passwordHash;
+        setPasswordHash(passwordHash);
         this.role = role;
     }
 
