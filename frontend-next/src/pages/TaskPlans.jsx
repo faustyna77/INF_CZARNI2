@@ -1,8 +1,69 @@
-// TaskPlans.jsx
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const TaskPlans = () => {
+  const [tasks, setTasks] = useState([]);
+  const [assignments, setAssignments] = useState({});
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
+
   useEffect(() => {
+    const fetchAssignments = async (taskId, token) => {
+      try {
+        const res = await fetch(`http://localhost:8080/assignments/task/${taskId}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        if (!res.ok) throw new Error("Failed to fetch assignments");
+        const data = await res.json();
+        setAssignments(prev => ({ ...prev, [taskId]: data }));
+      } catch (err) {
+        console.error(`Error fetching assignments for task ${taskId}:`, err);
+      }
+    };
+
+    const fetchTasks = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:8080/tasks", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+    
+        if (!res.ok) throw new Error("Failed to fetch tasks");
+    
+        const data = await res.json();
+        setTasks(data);
+
+        data.forEach(task => {
+          fetchAssignments(task.id, token);
+        });
+      } catch (err) {
+        console.error("Error fetching tasks:", err);
+      }
+    };
+
+    const fetchEmployees = async () => {
+      try {
+        const res = await fetch("http://localhost:8080/users");
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+    
+        const text = await res.text();
+        if (!text) throw new Error("Empty response from /users");
+    
+        const data = JSON.parse(text);
+        const filtered = data.filter(user => user.role === "USER");
+        setEmployees(filtered);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      }
+    };
+
+    fetchTasks();
+    fetchEmployees();
+
+    // Dropdown behavior
     const dropdownToggles = document.querySelectorAll(".dropdown-toggle");
 
     dropdownToggles.forEach((toggle) => {
@@ -19,6 +80,14 @@ const TaskPlans = () => {
       }
     });
   }, []);
+
+  const handleCheckboxChange = (employeeId) => {
+    setSelectedEmployees((prev) =>
+      prev.includes(employeeId)
+        ? prev.filter((id) => id !== employeeId)
+        : [...prev, employeeId]
+    );
+  };
 
   return (
     <div className="container mx-auto p-4 bg-gray-900 text-gray-100">
@@ -67,15 +136,15 @@ const TaskPlans = () => {
                 Lista pracowników <span className="arrow">▼</span>
               </button>
               <div className="dropdown-menu hidden absolute left-0 right-0 mt-1 bg-gray-700 border border-gray-600 rounded shadow-lg z-10">
-                {[
-                  "Jan Kowalski",
-                  "Anna Nowak",
-                  "Piotr Wiśniewski",
-                  "Maria Lewandowska",
-                  "Krzysztof Wójcik",
-                ].map((name, index) => (
-                  <label key={index} className="block px-4 py-2 hover:bg-gray-600 cursor-pointer">
-                    <input type="checkbox" className="mr-2" /> {name}
+                {employees.map((employee) => (
+                  <label key={employee.id} className="block px-4 py-2 hover:bg-gray-600 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="mr-2"
+                      checked={selectedEmployees.includes(employee.id)}
+                      onChange={() => handleCheckboxChange(employee.id)}
+                    />
+                    {employee.firstName} {employee.lastName}
                   </label>
                 ))}
               </div>
@@ -89,14 +158,14 @@ const TaskPlans = () => {
       </div>
 
       <div className="space-y-4 mb-6">
-        {[30, 50].map((progress, index) => (
-          <div className="bg-gray-800 rounded-lg shadow overflow-hidden" key={index}>
+        {tasks.map((task) => (
+          <div className="bg-gray-800 rounded-lg shadow overflow-hidden" key={task.id}>
             <div className="p-4 flex items-center justify-between border-b border-gray-700">
-              <div className="font-medium">Nazwa Zadania</div>
+              <div className="font-medium">{task.taskName}</div>
               <div className="w-1/2 bg-gray-700 rounded-full h-2">
                 <div
                   className="bg-purple-500 h-2 rounded-full"
-                  style={{ width: `${progress}%` }}
+                  style={{ width: "50%" }} // You can replace with actual progress if available
                 ></div>
               </div>
             </div>
@@ -107,9 +176,11 @@ const TaskPlans = () => {
                   Lista przydzielonych pracowników
                 </summary>
                 <ul className="mt-2 ml-4 text-gray-400">
-                  <li>Pracownik 1</li>
-                  <li>Pracownik 2</li>
-                  <li>Pracownik 3</li>
+                  {assignments[task.id]?.map((assignment) => (
+                    <li key={assignment.id}>
+                      {assignment.user.firstName} {assignment.user.lastName}
+                    </li>
+                  )) || <li>Brak przypisanych pracowników</li>}
                 </ul>
               </details>
 

@@ -12,6 +12,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TaskAssignment {
 
+    public TaskAssignment(Task task, User user, LocalDateTime assignedAt) {
+        this.task = task;
+        this.user = user;
+        this.assignedAt = assignedAt;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -27,4 +33,5 @@ public class TaskAssignment {
 
     @Column(name = "assigned_at", nullable = false)
     private LocalDateTime assignedAt = LocalDateTime.now();
+
 }

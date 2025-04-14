@@ -13,6 +13,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Report {
 
+    public Report(ReportType reportType, User generatedBy, LocalDateTime generatedAt, String fileUrl) {
+        this.reportType = reportType;
+        this.generatedBy = generatedBy;
+        this.generatedAt = generatedAt;
+        this.fileUrl = fileUrl;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 

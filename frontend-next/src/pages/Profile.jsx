@@ -1,24 +1,86 @@
-// Profile.jsx
+import React, { useEffect, useState } from 'react';
+
 const Profile = () => {
-  const username = "admin"; // Możesz też pobrać z propsów lub contextu
+    const [user, setUser] = useState(null);
+    const [error, setError] = useState('');
 
-  return (
-    <div className="bg-gray-900 text-white min-h-screen flex justify-center items-center">
-      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 max-w-md w-full shadow-lg text-center">
-        <h1 className="text-2xl mb-4">Witaj, {username}!</h1>
-        <p className="text-gray-300 mb-6">To jest Twoja strona profilu użytkownika.</p>
+    useEffect(() => {
+        const fetchUser = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setError('Brak tokenu. Użytkownik nie jest zalogowany.');
+                return;
+            }
 
-        <div className="border-t border-gray-600 pt-4 text-gray-400 text-sm">
-          <p>
-            Rola: <span className="text-white font-bold">Administrator</span>
-          </p>
-          <p>
-            Status: <span className="text-green-500 font-bold">Aktywny</span>
-          </p>
+            try {
+                const response = await fetch('http://localhost:8080/users/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Nie udało się pobrać danych użytkownika');
+
+                const data = await response.json();
+                setUser(data);
+            } catch (err) {
+                setError(err.message);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
+    if (error) {
+        return <div style={styles.error}>{error}</div>;
+    }
+
+    if (!user) {
+        return <div style={styles.loading}>Ładowanie danych użytkownika...</div>;
+    }
+
+    return (
+        <div style={styles.container}>
+            <h1 style={styles.header}>Profil użytkownika</h1>
+            <div style={styles.profileBox}>
+                <p><strong>Imię:</strong> {user.firstName}</p>
+                <p><strong>Nazwisko:</strong> {user.lastName}</p>
+                <p><strong>Email:</strong> {user.email}</p>
+                <p><strong>Rola:</strong> {user.role}</p>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
+};
+
+const styles = {
+    container: {
+        padding: '20px',
+        maxWidth: '600px',
+        margin: '0 auto',
+        backgroundColor: '#2a2828',
+        color: 'white',
+        borderRadius: '8px',
+    },
+    header: {
+        textAlign: 'center',
+        color: '#fff',
+    },
+    profileBox: {
+        padding: '20px',
+        backgroundColor: '#3a3a3a',
+        borderRadius: '8px',
+        lineHeight: '1.8',
+    },
+    loading: {
+        color: 'white',
+        textAlign: 'center',
+        padding: '20px'
+    },
+    error: {
+        color: 'red',
+        textAlign: 'center',
+        padding: '20px'
+    }
 };
 
 export default Profile;
