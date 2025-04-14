@@ -27,6 +27,18 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Order(String cadaverFirstName, String cadaverLastName, Status status, User user) {
+        this.orderDate = LocalDateTime.now();
+        this.cadaverFirstName = cadaverFirstName;
+        this.cadaverLastName = cadaverLastName;
+        this.status = status;
+        this.user = user;
+    }
+
+    public Order() {
+
+    }
+
     public enum Status {
         pending, completed, canceled
     }

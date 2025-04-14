@@ -2,5 +2,5 @@
 
 ## Baza danych
 
-Schemat bazy danych znajduje się tutaj:  
+Schemat bazy danych:  
 ![Schemat ERD](readme/erd.png)

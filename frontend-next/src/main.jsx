@@ -1,15 +1,15 @@
 import { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./pages/App";
-import Profile from "./pages/Profile";
+import App from "./pages/App.jsx";
+import Profile from "./pages/Profile.jsx";
 import Raports from "./pages/Raports.jsx";
-import Log from "./pages/Log";
+import Log from "./pages/Log.jsx";
 import Admin from "./pages/admin-panel/Admin.jsx";
 import RootLayout from "./layouts/RootLayout.jsx";
-import './index.css';
+import "./styles/index.css";
 import TaskPlans from "./pages/TaskPlans.jsx";
-import Recepcionist from "./pages/Recepcionist.jsx";
+import Recepcionist from "./pages/Receptionist.jsx";
 
 // 🔧 Komponent z tokenem globalnym
 const Root = () => {

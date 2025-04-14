@@ -40,6 +40,10 @@ public class Task {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    public Task() {
+
+    }
+
     // --- ENUMY ---
     public enum Status {
         pending, in_progress, completed, canceled
@@ -47,6 +51,17 @@ public class Task {
 
     public enum Priority {
         low, medium, high
+    }
+
+    public Task(String taskName, String description, Status status, Priority priority, LocalDateTime dueDate, LocalDateTime createdAt, LocalDateTime updatedAt, Order order) {
+        this.taskName = taskName;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+        this.dueDate = dueDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.order = order;
     }
 
     // --- GETTERY I SETTERY ---

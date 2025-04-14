@@ -1,61 +1,19 @@
+// Profile.jsx
 const Profile = () => {
   const username = "admin"; // Możesz też pobrać z propsów lub contextu
 
-  const styles = {
-    container: {
-      backgroundColor: "#121212",
-      color: "#ffffff",
-      minHeight: "100vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    card: {
-      backgroundColor: "#1e1e1e",
-      border: "1px solid #333",
-      borderRadius: "16px",
-      padding: "32px",
-      maxWidth: "400px",
-      width: "100%",
-      boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)",
-      textAlign: "center",
-    },
-    title: {
-      fontSize: "28px",
-      marginBottom: "16px",
-    },
-    subtitle: {
-      color: "#ccc",
-      marginBottom: "24px",
-    },
-    info: {
-      borderTop: "1px solid #444",
-      paddingTop: "16px",
-      color: "#aaa",
-      fontSize: "14px",
-    },
-    highlight: {
-      color: "#fff",
-      fontWeight: "bold",
-    },
-    status: {
-      color: "#4caf50",
-      fontWeight: "bold",
-    },
-  };
-
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Witaj, {username}!</h1>
-        <p style={styles.subtitle}>To jest Twoja strona profilu użytkownika.</p>
+    <div className="bg-gray-900 text-white min-h-screen flex justify-center items-center">
+      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 max-w-md w-full shadow-lg text-center">
+        <h1 className="text-2xl mb-4">Witaj, {username}!</h1>
+        <p className="text-gray-300 mb-6">To jest Twoja strona profilu użytkownika.</p>
 
-        <div style={styles.info}>
+        <div className="border-t border-gray-600 pt-4 text-gray-400 text-sm">
           <p>
-            Rola: <span style={styles.highlight}>Administrator</span>
+            Rola: <span className="text-white font-bold">Administrator</span>
           </p>
           <p>
-            Status: <span style={styles.status}>Aktywny</span>
+            Status: <span className="text-green-500 font-bold">Aktywny</span>
           </p>
         </div>
       </div>
