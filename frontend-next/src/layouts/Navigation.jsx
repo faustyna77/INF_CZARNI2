@@ -1,46 +1,52 @@
+// Navigation.jsx
 import { Link } from "react-router-dom";
 
 const Navigation = ({ token, handleLogout }) => {
   return (
-    <nav style={styles.nav}>
-      <Link style={styles.link} to="/">🏠 Home</Link>
-      {token && <Link style={styles.link} to="/profile">👤 Profile</Link>}
-      {token && <Link style={styles.link} to="/admin">⚙️ Admin Panel</Link>}
-      {token && <Link style={styles.link} to="/raports">📊 Raporty</Link>}
-      {token && <Link style={styles.link} to="/recepcionist">📊 Recepcja</Link>}
-      {token && <Link style={styles.link} to="/tasks">📋 Zadania</Link>}
-      {!token && <Link style={styles.link} to="/log">🔐 Logowanie</Link>}
+    <nav className="flex gap-4 p-5 bg-gray-800 border-b border-gray-700 justify-center items-center">
+      <Link className="text-purple-400 hover:text-purple-300 transition-colors no-underline font-medium" to="/">
+        🏠 Home
+      </Link>
       {token && (
-        <button style={styles.button} onClick={handleLogout}>🚪 Wyloguj</button>
+        <Link className="text-purple-400 hover:text-purple-300 transition-colors no-underline font-medium" to="/profile">
+          👤 Profile
+        </Link>
+      )}
+      {token && (
+        <Link className="text-purple-400 hover:text-purple-300 transition-colors no-underline font-medium" to="/admin">
+          ⚙️ Admin Panel
+        </Link>
+      )}
+      {token && (
+        <Link className="text-purple-400 hover:text-purple-300 transition-colors no-underline font-medium" to="/raports">
+          📊 Raporty
+        </Link>
+      )}
+      {token && (
+        <Link className="text-purple-400 hover:text-purple-300 transition-colors no-underline font-medium" to="/recepcionist">
+          📊 Recepcja
+        </Link>
+      )}
+      {token && (
+        <Link className="text-purple-400 hover:text-purple-300 transition-colors no-underline font-medium" to="/tasks">
+          📋 Zadania
+        </Link>
+      )}
+      {!token && (
+        <Link className="text-purple-400 hover:text-purple-300 transition-colors no-underline font-medium" to="/log">
+          🔐 Logowanie
+        </Link>
+      )}
+      {token && (
+        <button
+          className="bg-red-600 hover:bg-red-500 text-white border-none py-2 px-4 rounded cursor-pointer font-medium transition-colors"
+          onClick={handleLogout}
+        >
+          🚪 Wyloguj
+        </button>
       )}
     </nav>
   );
-};
-
-const styles = {
-  nav: {
-    display: "flex",
-    gap: "15px",
-    padding: "20px",
-    backgroundColor: "#1e1e1e",
-    borderBottom: "1px solid #333",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  link: {
-    color: "#bb86fc",
-    textDecoration: "none",
-    fontWeight: "bold",
-  },
-  button: {
-    backgroundColor: "#cf6679",
-    color: "#fff",
-    border: "none",
-    padding: "8px 16px",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontWeight: "bold",
-  },
 };
 
 export default Navigation;

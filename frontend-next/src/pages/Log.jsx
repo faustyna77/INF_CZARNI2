@@ -5,7 +5,7 @@ import axios from "axios";
 const Log = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // 👈 dodane
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,7 +19,7 @@ const Log = ({ setToken }) => {
       setToken(token);
       localStorage.setItem("token", token);
       alert("Zalogowano pomyślnie!");
-      navigate("/"); // 👈 przekierowanie po zalogowaniu
+      navigate("/");
     } catch (error) {
       console.error("Błąd logowania:", error);
       alert("Nieprawidłowy login lub hasło!");
@@ -27,68 +27,32 @@ const Log = ({ setToken }) => {
   };
 
   return (
-    <div style={styles.container}>
-      <form style={styles.form} onSubmit={handleLogin}>
-        <h2 style={styles.heading}>Logowanie</h2>
+    <div className="flex h-screen items-center justify-center bg-gray-900">
+      <form className="flex flex-col p-10 rounded-lg bg-gray-800 shadow-2xl w-80" onSubmit={handleLogin}>
+        <h2 className="mb-6 text-2xl font-bold text-center text-gray-200">Logowanie</h2>
         <input
           type="email"
           placeholder="Email"
-          style={styles.input}
+          className="p-3 mb-4 border border-gray-700 rounded bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-400"
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
           type="password"
           placeholder="Hasło"
-          style={styles.input}
+          className="p-3 mb-6 border border-gray-700 rounded bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-400"
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" style={styles.button}>Zaloguj</button>
+        <button
+          type="submit"
+          className="p-3 bg-purple-700 hover:bg-purple-600 text-white rounded font-bold transition-colors"
+        >
+          Zaloguj
+        </button>
       </form>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    height: "100vh",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#f4f4f4",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    padding: "40px",
-    borderRadius: "10px",
-    backgroundColor: "#fff",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-    width: "300px",
-  },
-  heading: {
-    marginBottom: "20px",
-    textAlign: "center",
-    color: "#333",
-  },
-  input: {
-    padding: "10px",
-    marginBottom: "15px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-    fontSize: "16px",
-  },
-  button: {
-    padding: "10px",
-    backgroundColor: "#333",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontWeight: "bold",
-    fontSize: "16px",
-  },
 };
 
 export default Log;

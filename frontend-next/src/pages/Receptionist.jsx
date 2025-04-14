@@ -1,3 +1,4 @@
+// Receptionist.jsx (NewOrderForm)
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -67,309 +68,187 @@ const NewOrderForm = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.formHeader}>
+    <div className="w-full max-w-4xl mx-auto font-serif border border-gray-700 rounded overflow-hidden shadow-lg">
+      <div className="bg-gray-900 text-gray-300 px-4 py-3 flex justify-between items-center border-b border-gray-700">
         <h2>Realizacja nowego zlecenia przez recepcję</h2>
-        <div style={styles.windowControls}>
-          <button style={styles.minimizeButton}>—</button>
-          <button style={styles.maximizeButton}>□</button>
-          <button style={styles.closeButton}>✕</button>
+        <div className="flex gap-2">
+          <button className="bg-transparent text-gray-300 hover:text-white">—</button>
+          <button className="bg-transparent text-gray-300 hover:text-white">□</button>
+          <button className="bg-transparent text-gray-300 hover:text-white">✕</button>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.formContent}>
-          <div style={styles.formSection}>
-            <div style={styles.sectionHeader}>Dane klienta</div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>imię</label>
+      <form onSubmit={handleSubmit} className="p-5 bg-gray-800">
+        <div className="flex flex-wrap gap-5 mb-5">
+          <div className="flex-1 min-w-[300px] bg-gray-700 p-4 rounded shadow">
+            <div className="bg-gray-900 text-gray-300 p-2 text-center mb-4 rounded font-serif tracking-wide border-b border-gray-500">
+              Dane klienta
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">imię</label>
               <input
                 type="text"
                 name="firstName"
                 value={formData.client.firstName}
                 onChange={handleClientChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>nazwisko</label>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">nazwisko</label>
               <input
                 type="text"
                 name="lastName"
                 value={formData.client.lastName}
                 onChange={handleClientChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>numer telefonu</label>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">numer telefonu</label>
               <input
                 type="text"
                 name="phoneNumber"
                 value={formData.client.phoneNumber}
                 onChange={handleClientChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>adres e-mail</label>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">adres e-mail</label>
               <input
                 type="email"
                 name="email"
                 value={formData.client.email}
                 onChange={handleClientChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>adres zamieszkania</label>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">adres zamieszkania</label>
               <input
                 type="text"
                 name="address"
                 value={formData.client.address}
                 onChange={handleClientChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
           </div>
 
-          <div style={styles.formSection}>
-            <div style={styles.sectionHeader}>Dane osoby zmarłej</div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>imię</label>
+          <div className="flex-1 min-w-[300px] bg-gray-700 p-4 rounded shadow">
+            <div className="bg-gray-900 text-gray-300 p-2 text-center mb-4 rounded font-serif tracking-wide border-b border-gray-500">
+              Dane osoby zmarłej
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">imię</label>
               <input
                 type="text"
                 name="firstName"
                 value={formData.deceased.firstName}
                 onChange={handleDeceasedChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>nazwisko</label>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">nazwisko</label>
               <input
                 type="text"
                 name="lastName"
                 value={formData.deceased.lastName}
                 onChange={handleDeceasedChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>data urodzenia</label>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">data urodzenia</label>
               <input
                 type="text"
                 name="birthDate"
                 value={formData.deceased.birthDate}
                 onChange={handleDeceasedChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>data zgonu</label>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">data zgonu</label>
               <input
                 type="text"
                 name="deathDate"
                 value={formData.deceased.deathDate}
                 onChange={handleDeceasedChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>numer aktu zgonu</label>
+            <div className="mb-4">
+              <label className="block mb-1 text-sm text-gray-400 italic">numer aktu zgonu</label>
               <input
                 type="text"
                 name="deathCertificateNumber"
                 value={formData.deceased.deathCertificateNumber}
                 onChange={handleDeceasedChange}
-                style={styles.input}
+                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
               />
             </div>
           </div>
 
-          <div style={styles.formSection}>
-            <div style={styles.sectionHeader}>Usługi</div>
-            <div style={styles.checkboxGroup}>
+          <div className="flex-1 min-w-[300px] bg-gray-700 p-4 rounded shadow">
+            <div className="bg-gray-900 text-gray-300 p-2 text-center mb-4 rounded font-serif tracking-wide border-b border-gray-500">
+              Usługi
+            </div>
+            <div className="flex items-center mb-3">
               <input
                 type="checkbox"
                 id="bodyCollection"
                 name="bodyCollection"
                 checked={formData.services.bodyCollection}
                 onChange={handleServiceChange}
-                style={styles.checkbox}
+                className="mr-2 accent-gray-500"
               />
-              <label htmlFor="bodyCollection" style={styles.checkboxLabel}>
+              <label htmlFor="bodyCollection" className="text-sm text-gray-400">
                 odebranie ciała przez zakład
               </label>
             </div>
-            <div style={styles.checkboxGroup}>
+            <div className="flex items-center mb-3">
               <input
                 type="checkbox"
                 id="coffinPurchase"
                 name="coffinPurchase"
                 checked={formData.services.coffinPurchase}
                 onChange={handleServiceChange}
-                style={styles.checkbox}
+                className="mr-2 accent-gray-500"
               />
-              <label htmlFor="coffinPurchase" style={styles.checkboxLabel}>
+              <label htmlFor="coffinPurchase" className="text-sm text-gray-400">
                 zakup trumny
               </label>
             </div>
-            <div style={styles.checkboxGroup}>
+            <div className="flex items-center mb-3">
               <input
                 type="checkbox"
                 id="funeralCeremony"
                 name="funeralCeremony"
                 checked={formData.services.funeralCeremony}
                 onChange={handleServiceChange}
-                style={styles.checkbox}
+                className="mr-2 accent-gray-500"
               />
-              <label htmlFor="funeralCeremony" style={styles.checkboxLabel}>
+              <label htmlFor="funeralCeremony" className="text-sm text-gray-400">
                 ceremonia pochówku
               </label>
             </div>
           </div>
         </div>
 
-        <div style={styles.formActions}>
-          <button type="submit" style={styles.submitButton}>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-gray-600 hover:bg-gray-500 text-gray-300 border-none px-8 py-3 text-base rounded uppercase font-serif tracking-wide shadow transition-colors"
+          >
             DODAJ
           </button>
         </div>
       </form>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    width: '100%',
-    maxWidth: '960px',
-    margin: '0 auto',
-    fontFamily: 'Georgia, serif',
-    border: '1px solid #333',
-    borderRadius: '3px',
-    overflow: 'hidden',
-    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.6)'
-  },
-  formHeader: {
-    backgroundColor: '#1a1a1a',
-    color: '#d4d4d4',
-    padding: '10px 15px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottom: '1px solid #444'
-  },
-  windowControls: {
-    display: 'flex',
-    gap: '5px'
-  },
-  minimizeButton: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: '#d4d4d4',
-    cursor: 'pointer',
-    fontSize: '16px',
-    padding: '0 5px'
-  },
-  maximizeButton: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: '#d4d4d4',
-    cursor: 'pointer',
-    fontSize: '16px',
-    padding: '0 5px'
-  },
-  closeButton: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: '#d4d4d4',
-    cursor: 'pointer',
-    fontSize: '16px',
-    padding: '0 5px'
-  },
-  form: {
-    padding: '20px',
-    backgroundColor: '#2a2a2a'
-  },
-  formContent: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '20px',
-    marginBottom: '20px'
-  },
-  formSection: {
-    flex: '1 1 300px',
-    backgroundColor: '#333',
-    padding: '15px',
-    borderRadius: '5px',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)'
-  },
-  sectionHeader: {
-    backgroundColor: '#111',
-    color: '#d4d4d4',
-    padding: '10px',
-    textAlign: 'center',
-    marginBottom: '15px',
-    borderRadius: '3px',
-    fontFamily: 'Times New Roman, serif',
-    letterSpacing: '1px',
-    borderBottom: '1px solid #777'
-  },
-  inputGroup: {
-    marginBottom: '15px',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  label: {
-    marginBottom: '5px',
-    fontSize: '14px',
-    color: '#bbb',
-    fontStyle: 'italic'
-  },
-  input: {
-    padding: '8px',
-    backgroundColor: '#222',
-    border: '1px solid #555',
-    borderRadius: '3px',
-    fontSize: '14px',
-    color: '#ddd'
-  },
-  checkboxGroup: {
-    marginBottom: '10px',
-    display: 'flex',
-    alignItems: 'center'
-  },
-  checkbox: {
-    marginRight: '8px',
-    accentColor: '#6b6b6b'
-  },
-  checkboxLabel: {
-    fontSize: '14px',
-    color: '#bbb'
-  },
-  formActions: {
-    display: 'flex',
-    justifyContent: 'flex-end'
-  },
-  submitButton: {
-    backgroundColor: '#4a4a4a',
-    color: '#d4d4d4',
-    border: 'none',
-    padding: '12px 30px',
-    fontSize: '16px',
-    cursor: 'pointer',
-    borderRadius: '3px',
-    textTransform: 'uppercase',
-    fontFamily: 'Times New Roman, serif',
-    letterSpacing: '1px',
-    transition: 'all 0.3s',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
-    ':hover': {
-      backgroundColor: '#3a3a3a'
-    }
-  }
 };
 
 export default NewOrderForm;
