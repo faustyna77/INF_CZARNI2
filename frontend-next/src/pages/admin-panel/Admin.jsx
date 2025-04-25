@@ -60,9 +60,12 @@ const Admin = () => {
     };
 
     const handleDeleteUser = async () => {
+        const confirm = window.confirm('Czy na pewno chcesz usunąć tego użytkownika?');
+        if (!confirm) return;
         try {
             const response = await fetch(`http://localhost:8080/users/${editingUser.id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
             });
             if (!response.ok) throw new Error('Failed to delete user');
             setUsers(users.filter(user => user.id !== editingUser.id));
@@ -70,6 +73,11 @@ const Admin = () => {
         } catch (err) {
             setError(err.message);
         }
+    };
+
+    const handleCancelEdit = () => {
+        setEditingUser(null);
+        setFormData({ firstName: '', lastName: '', email: '', role: 'USER' });
     };
 
     if (loading) return <div style={styles.loading}>Loading...</div>;
@@ -215,9 +223,8 @@ const styles = {
         color: 'red',
     },
     editForm: {
-        marginTop: '30px',
-        padding: '20px',
-        backgroundColor: '#fff',
+        backgroundColor: '#2a2828',
+        color: 'white',
         borderRadius: '8px',
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
         maxWidth: '500px',
@@ -230,6 +237,8 @@ const styles = {
         borderRadius: '4px',
         border: '1px solid #ccc',
         fontSize: '16px',
+        backgroundColor: '#444',
+        color: 'white'
     },
     loading: {
         color: 'white',

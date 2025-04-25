@@ -1,9 +1,9 @@
 package zaklad.pogrzebowy.api.models;
 
-
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tasks")
@@ -40,7 +40,14 @@ public class Task {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    // --- ENUMY ---
+    @ManyToMany
+    @JoinTable(
+            name = "task_user",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
+
     public enum Status {
         pending, in_progress, completed, canceled
     }
@@ -49,7 +56,7 @@ public class Task {
         low, medium, high
     }
 
-    // --- GETTERY I SETTERY ---
+    // Gettery i settery
     public Long getId() {
         return id;
     }
@@ -118,4 +125,11 @@ public class Task {
         this.order = order;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }

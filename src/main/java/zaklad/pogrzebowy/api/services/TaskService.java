@@ -51,6 +51,14 @@ public class TaskService implements ITaskService {
 
     @Override
     public void delete(Long id) {
+        Task task = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        if (task.getUsers() != null) {
+            task.getUsers().clear(); // usunięcie przypisań
+            repository.save(task);
+        }
+
         repository.deleteById(id);
     }
 }
