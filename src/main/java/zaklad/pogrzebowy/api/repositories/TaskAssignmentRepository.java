@@ -10,4 +10,5 @@ import java.util.List;
 public interface TaskAssignmentRepository extends JpaRepository<TaskAssignment, Long> {
     List<TaskAssignment> findByUserId(Long userId);
     List<TaskAssignment> findByTaskId(Long taskId);
+    void deleteAllByUserId(Long userId);
 }

@@ -5,6 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zaklad.pogrzebowy.api.models.User;
+import zaklad.pogrzebowy.api.repositories.OrderRepository;
+import zaklad.pogrzebowy.api.repositories.TaskAssignmentRepository;
 import zaklad.pogrzebowy.api.repositories.UserRepository;
 
 import java.util.List;
@@ -17,6 +19,11 @@ public class UserService implements IUserService {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private TaskAssignmentRepository assignmentRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Autowired
     public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
@@ -91,10 +98,13 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public void delete(Long id) {
-        repository.deleteById(id);
-    }
+        User user = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Użytkownik nie znaleziony"));
 
-    public boolean verifyPassword(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
+        // Usuń wszystkie przypisania i zamówienia tego użytkownika (jeśli takie istnieją)
+        assignmentRepository.deleteAllByUserId(id);
+        orderRepository.deleteAllByUserId(id);
+
+        repository.deleteById(id);
     }
 }

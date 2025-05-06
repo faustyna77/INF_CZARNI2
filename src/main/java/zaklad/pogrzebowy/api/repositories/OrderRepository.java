@@ -16,4 +16,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     // Możesz dodać inne zapytania np. po użytkowniku
     List<Order> findByUserId(Long Id);
+    void deleteAllByUserId(Long userId);
 }

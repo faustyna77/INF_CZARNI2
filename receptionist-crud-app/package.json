@@ -1,0 +1,27 @@
+{
+  "name": "receptionist-crud-app",
+  "version": "1.0.0",
+  "description": "A React application for managing orders in a funeral home setting, including CRUD functionality for clients and deceased information.",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "axios": "^0.21.1",
+    "tailwindcss": "^2.2.19",
+    "postcss": "^8.4.5",
+    "vite": "^2.6.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.27.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

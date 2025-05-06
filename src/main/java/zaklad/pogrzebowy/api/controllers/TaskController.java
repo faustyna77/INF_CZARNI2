@@ -23,6 +23,7 @@ public class TaskController {
         return taskService.findAll();
     }
 
+
     // Pobranie zadania po ID
     @GetMapping("/{id}")
     public Optional<Task> getTaskById(@PathVariable Long id) {

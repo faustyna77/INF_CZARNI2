@@ -1,9 +1,10 @@
 package zaklad.pogrzebowy.api.models;
 
-
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tasks")
@@ -35,12 +36,29 @@ public class Task {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
+    @Transient
+    private User assignedUser;  // NOWE POLE
+
+    public User getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(User assignedUser) {
+        this.assignedUser = assignedUser;
+    }
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
-    // --- ENUMY ---
+    @ManyToMany
+    @JoinTable(
+            name = "task_user",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
+
     public enum Status {
         pending, in_progress, completed, canceled
     }
@@ -49,7 +67,7 @@ public class Task {
         low, medium, high
     }
 
-    // --- GETTERY I SETTERY ---
+    // Gettery i settery
     public Long getId() {
         return id;
     }
@@ -118,4 +136,11 @@ public class Task {
         this.order = order;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }
