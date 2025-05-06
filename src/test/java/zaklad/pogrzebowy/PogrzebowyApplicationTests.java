@@ -20,5 +20,4 @@ class PogrzebowyApplicationTests {
 	void simpleTest() {
 		assertTrue(true, "???");
 	}
-
 }
