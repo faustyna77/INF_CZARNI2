@@ -11,6 +11,30 @@ const TaskPlans = () => {
   const [taskOrderId, setTaskOrderId] = useState(null);
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [filterOrderId, setFilterOrderId] = useState("");
+  const [employees, setEmployees] = useState([]);
+const [taskEmployeeId, setTaskEmployeeId] = useState(null);
+
+const fetchEmployees = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch("http://localhost:8080/users", {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    if (!res.ok) throw new Error("Failed to fetch employees");
+    const data = await res.json();
+    setEmployees(data);
+  } catch (err) {
+    console.error("Error fetching employees:", err);
+  }
+};
+
+useEffect(() => {
+  fetchTasks();
+  fetchOrders();
+  fetchEmployees();  // Dodane
+}, []);
 
   const fetchTasks = async () => {
     try {
@@ -30,7 +54,12 @@ const TaskPlans = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("http://localhost:8080/orders");
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:8080/orders", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       if (!res.ok) throw new Error("Failed to fetch orders");
       const data = await res.json();
       setOrders(data);
@@ -38,11 +67,7 @@ const TaskPlans = () => {
       console.error("Error fetching orders:", err);
     }
   };
-
-  useEffect(() => {
-    fetchTasks();
-    fetchOrders();
-  }, []);
+  
 
   const resetForm = () => {
     setTaskName("");
@@ -243,6 +268,22 @@ const TaskPlans = () => {
           </button>
         )}
       </div>
+      <div>
+  <label className="block text-gray-400 mb-1 text-sm">Pracownik</label>
+  <select
+    className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+    value={taskEmployeeId || ""}
+    onChange={(e) => setTaskEmployeeId(Number(e.target.value))}
+  >
+    <option value="">Brak</option>
+    {employees.map((employee) => (
+      <option key={employee.id} value={employee.id}>
+        {employee.firstName} {employee.lastName}
+      </option>
+    ))}
+  </select>
+</div>
+
 
       <div className="space-y-4">
         {filteredTasks.map((task) => (
@@ -255,7 +296,12 @@ const TaskPlans = () => {
                 <p className="text-sm text-gray-500">
                   Zamówienie: {(task.order?.cadaverFirstName && task.order?.cadaverLastName) ? `${task.order.cadaverFirstName} ${task.order.cadaverLastName}` : (task.order?.id ? `ID: ${task.order.id}` : "brak")}
                 </p>
+                <p className="text-sm text-gray-500">
+  Przypisany: {task.assignedUser ? `${task.assignedUser.firstName} ${task.assignedUser.lastName}` : "brak"}
+</p>
+
               </div>
+              
               <div className="flex gap-2 mt-2 md:mt-0">
                 <button
                   className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm"

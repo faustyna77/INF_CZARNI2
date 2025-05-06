@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tasks")
@@ -35,6 +36,16 @@ public class Task {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
+    @Transient
+    private User assignedUser;  // NOWE POLE
+
+    public User getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(User assignedUser) {
+        this.assignedUser = assignedUser;
+    }
 
     @ManyToOne
     @JoinColumn(name = "order_id")
