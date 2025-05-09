@@ -55,7 +55,7 @@ public class SeedDB implements InitializingBean {
         orders.forEach(orderRepository::save);
 
         // 4. Seed Tasks
-        List<Task> tasks = createTasks(orders);
+        List<Task> tasks = createTasks(orders, users);
         tasks.forEach(taskRepository::save);
 
         // 5. Seed Task Assignments
@@ -101,7 +101,7 @@ public class SeedDB implements InitializingBean {
     }
 
     private Order createOrder(LocalDateTime orderDate, String cadaverFirstName, String cadaverLastName,
-                              Order.Status status, User user, Client client) {
+    Order.Status status, User user, Client client) {
         Order order = new Order();
         order.setOrderDate(orderDate);
         order.setCadaverFirstName(cadaverFirstName);
@@ -109,23 +109,27 @@ public class SeedDB implements InitializingBean {
         order.setStatus(status);
         order.setUser(user);
         order.setClient(client);
+        // Set example birth and death dates
+        order.setBirthDate(orderDate.minusYears(75)); // Example age
+        order.setDeathDate(orderDate.minusDays(1));   // Day before order
+        order.setDeathCertificateNumber("USC/" + orderDate.getYear() + "/" + String.format("%05d", (int)(Math.random() * 99999)));
         return order;
-    }
+        }
 
-    private List<Task> createTasks(List<Order> orders) {
+    private List<Task> createTasks(List<Order> orders, List<User> users) {
         LocalDateTime now = LocalDateTime.now();
         return Arrays.asList(
-                createTask("Transport ciała", "Transport ciała z domu do chłodni",
-                        Task.Status.in_progress, Task.Priority.high, now.plusDays(1), orders.get(0)),
-                createTask("Zamówienie trumny", "Zamówienie trumny standardowej",
-                        Task.Status.pending, Task.Priority.medium, now.plusDays(2), orders.get(0)),
-                createTask("Organizacja ceremonii", "Rezerwacja kaplicy i księdza",
-                        Task.Status.completed, Task.Priority.high, now.plusDays(3), orders.get(1))
+            createTask("Transport ciała", "Transport ciała z domu do chłodni",
+                    Task.Status.in_progress, Task.Priority.high, now.plusDays(1), orders.get(0), users.get(4)),
+            createTask("Zamówienie trumny", "Zamówienie trumny standardowej",
+                    Task.Status.pending, Task.Priority.medium, now.plusDays(2), orders.get(0), users.get(5)),
+            createTask("Organizacja ceremonii", "Rezerwacja kaplicy i księdza",
+                    Task.Status.completed, Task.Priority.high, now.plusDays(3), orders.get(1), users.get(6))
         );
     }
 
     private Task createTask(String taskName, String description, Task.Status status,
-                            Task.Priority priority, LocalDateTime dueDate, Order order) {
+                            Task.Priority priority, LocalDateTime dueDate, Order order, User assignedUser) {
         Task task = new Task();
         task.setTaskName(taskName);
         task.setDescription(description);
@@ -133,8 +137,9 @@ public class SeedDB implements InitializingBean {
         task.setPriority(priority);
         task.setDueDate(dueDate);
         task.setOrder(order);
+        task.setAssignedUser(assignedUser);
         return task;
-    }
+        }
 
     private List<TaskAssignment> createTaskAssignments(List<Task> tasks, List<User> users) {
         LocalDateTime now = LocalDateTime.now();

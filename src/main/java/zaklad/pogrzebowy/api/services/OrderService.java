@@ -3,6 +3,8 @@ package zaklad.pogrzebowy.api.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zaklad.pogrzebowy.api.models.Order;
+import zaklad.pogrzebowy.api.models.Client;
+import zaklad.pogrzebowy.api.repositories.ClientRepository;
 import zaklad.pogrzebowy.api.repositories.OrderRepository;
 
 import java.util.List;
@@ -13,6 +15,9 @@ public class OrderService implements IOrderService {
 
     @Autowired
     private OrderRepository repository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Override
     public List<Order> findAll() {
@@ -52,6 +57,18 @@ public class OrderService implements IOrderService {
 
     @Override
     public void delete(Long id) {
+        Order order = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        // Get the client before deleting the order
+        Client client = order.getClient();
+
+        // Delete the order first
         repository.deleteById(id);
+
+        // Then delete the associated client if exists
+        if (client != null) {
+            clientRepository.deleteById(client.getId());
+        }
     }
 }
