@@ -3,15 +3,17 @@ import { useEffect, useState } from "react";
 const TaskPlans = () => {
   const [tasks, setTasks] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [taskName, setTaskName] = useState("");
-  const [taskDescription, setTaskDescription] = useState("");
-  const [taskDeadline, setTaskDeadline] = useState("");
-  const [taskPriority, setTaskPriority] = useState("medium");
-  const [taskStatus, setTaskStatus] = useState("pending");
-  const [taskOrderId, setTaskOrderId] = useState(null);
-  const [editingTaskId, setEditingTaskId] = useState(null);
   const [employees, setEmployees] = useState([]);
-  const [taskEmployeeId, setTaskEmployeeId] = useState(null);
+  const [editingTask, setEditingTask] = useState(null);
+  const [formData, setFormData] = useState({
+    taskName: '',
+    description: '',
+    dueDate: '',
+    priority: 'medium',
+    status: 'pending',
+    orderId: '',
+    employeeId: ''
+  });
 
   // Filter states
   const [filterOrderId, setFilterOrderId] = useState("");
@@ -91,13 +93,15 @@ const TaskPlans = () => {
   }, []);
 
   const resetForm = () => {
-    setTaskName("");
-    setTaskDescription("");
-    setTaskDeadline("");
-    setTaskPriority("medium");
-    setTaskStatus("pending");
-    setTaskOrderId(null);
-    setTaskEmployeeId(null);
+    setFormData({
+      taskName: '',
+      description: '',
+      dueDate: '',
+      priority: 'medium',
+      status: 'pending',
+      orderId: '',
+      employeeId: ''
+    });
   };
   
   const handleAddTask = async () => {
@@ -105,13 +109,13 @@ const TaskPlans = () => {
   
     try {
         const taskData = {
-            taskName,
-            description: taskDescription,
-            priority: taskPriority,
-            status: taskStatus,
-            dueDate: taskDeadline,
-            order: taskOrderId ? { id: parseInt(taskOrderId) } : null,
-            assignedUser: taskEmployeeId ? { id: parseInt(taskEmployeeId) } : null
+            taskName: formData.taskName,
+            description: formData.description,
+            priority: formData.priority,
+            status: formData.status,
+            dueDate: formData.dueDate,
+            order: formData.orderId ? { id: parseInt(formData.orderId) } : null,
+            assignedUser: formData.employeeId ? { id: parseInt(formData.employeeId) } : null
         };
 
         console.log('Sending task data:', taskData);
@@ -162,13 +166,13 @@ const TaskPlans = () => {
   
     try {
       const taskData = {
-        taskName,
-        description: taskDescription,
-        priority: taskPriority,
-        status: taskStatus,
-        dueDate: taskDeadline,
-        order: taskOrderId ? { id: taskOrderId } : null,
-        assignedUser: taskEmployeeId ? { id: taskEmployeeId } : null
+        taskName: formData.taskName,
+        description: formData.description,
+        priority: formData.priority,
+        status: formData.status,
+        dueDate: formData.dueDate,
+        order: formData.orderId ? { id: parseInt(formData.orderId) } : null,
+        assignedUser: formData.employeeId ? { id: parseInt(formData.employeeId) } : null
       };
       
       console.log('Updating task:', taskId, 'with data:', taskData);
@@ -197,7 +201,7 @@ const TaskPlans = () => {
       setTasks(prev =>
         prev.map(task => task.id === taskId ? updatedTask : task)
       );
-      setEditingTaskId(null);
+      setEditingTask(null);
       resetForm();
     } catch (err) {
       console.error("Error updating task:", err);
@@ -318,13 +322,91 @@ const filteredTasks = tasks.filter(task => {
     return true;
 });
 
+  const handleEditClick = (task) => {
+    setEditingTask(task);
+    setFormData({
+      taskName: task.taskName || '',
+      description: task.description || '',
+      dueDate: task.dueDate ? task.dueDate.substring(0, 16) : '',
+      priority: task.priority || 'medium',
+      status: task.status || 'pending',
+      orderId: task.order?.id || '',
+      employeeId: task.assignedUser?.id || ''
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSaveChanges = async () => {
+    const token = localStorage.getItem("token");
+  
+    try {
+      // Format the date properly if it exists
+      const formattedDueDate = formData.dueDate ? 
+        new Date(formData.dueDate).toISOString() : null;
+
+      const taskData = {
+        id: editingTask.id, // Include the ID
+        taskName: formData.taskName,
+        description: formData.description,
+        priority: formData.priority,
+        status: formData.status,
+        dueDate: formattedDueDate,
+        order: formData.orderId ? { id: parseInt(formData.orderId) } : null,
+        assignedUser: formData.employeeId ? { id: parseInt(formData.employeeId) } : null
+      };
+
+      console.log('Sending task update:', taskData); // Debug log
+
+      const res = await fetch(`http://localhost:8080/tasks/${editingTask.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(taskData)
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Server response:', errorText);
+        throw new Error(`Failed to update task: ${res.status} ${errorText}`);
+      }
+      
+      const updatedTask = await res.json();
+      setTasks(prev => prev.map(task => 
+        task.id === updatedTask.id ? updatedTask : task
+      ));
+      handleCancelEdit();
+    } catch (err) {
+      console.error("Error updating task:", err);
+      alert(`Error updating task: ${err.message}`);
+    }
+};
+
+  const handleCancelEdit = () => {
+    setEditingTask(null);
+    setFormData({
+      taskName: '',
+      description: '',
+      dueDate: '',
+      priority: 'medium',
+      status: 'pending',
+      orderId: '',
+      employeeId: ''
+    });
+  };
+
   // Update the order selection in the form JSX
   return (
     <div className="container mx-auto p-4 bg-gray-900 text-gray-100">
       {/* Formularz zadania */}
       <div className="mb-8 bg-gray-800 p-4 rounded-lg">
         <h2 className="text-xl font-semibold mb-4">
-          {editingTaskId ? "Edytuj zadanie" : "Dodaj nowe zadanie"}
+          {editingTask ? "Edytuj zadanie" : "Dodaj nowe zadanie"}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         <div>
@@ -332,8 +414,9 @@ const filteredTasks = tasks.filter(task => {
           <input
             type="text"
             className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
-            value={taskName}
-            onChange={(e) => setTaskName(e.target.value)}
+            name="taskName"
+            value={formData.taskName}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -341,8 +424,9 @@ const filteredTasks = tasks.filter(task => {
           <input
             type="text"
             className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
-            value={taskDescription}
-            onChange={(e) => setTaskDescription(e.target.value)}
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -350,16 +434,18 @@ const filteredTasks = tasks.filter(task => {
           <input
             type="datetime-local"
             className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
-            value={taskDeadline}
-            onChange={(e) => setTaskDeadline(e.target.value)}
+            name="dueDate"
+            value={formData.dueDate}
+            onChange={handleInputChange}
           />
         </div>
         <div>
           <label className="block text-gray-400 mb-1 text-sm">Priorytet</label>
           <select
             className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
-            value={taskPriority}
-            onChange={(e) => setTaskPriority(e.target.value)}
+            name="priority"
+            value={formData.priority}
+            onChange={handleInputChange}
           >
             <option value="low">Niski</option>
             <option value="medium">Średni</option>
@@ -370,8 +456,9 @@ const filteredTasks = tasks.filter(task => {
           <label className="block text-gray-400 mb-1 text-sm">Status</label>
           <select
             className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
-            value={taskStatus}
-            onChange={(e) => setTaskStatus(e.target.value)}
+            name="status"
+            value={formData.status}
+            onChange={handleInputChange}
           >
             <option value="pending">Oczekujące</option>
             <option value="in_progress">W trakcie</option>
@@ -383,8 +470,9 @@ const filteredTasks = tasks.filter(task => {
             <label className="block text-gray-400 mb-1 text-sm">Zamówienie</label>
             <select
               className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
-              value={taskOrderId || ""}
-              onChange={(e) => setTaskOrderId(e.target.value ? Number(e.target.value) : null)}
+              name="orderId"
+              value={formData.orderId}
+              onChange={handleInputChange}
             >
               <option value="">Brak</option>
               {orders.map((order) => (
@@ -399,8 +487,9 @@ const filteredTasks = tasks.filter(task => {
             <label className="block text-gray-400 mb-1 text-sm">Pracownik</label>
             <select
               className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
-              value={taskEmployeeId || ""}
-              onChange={(e) => setTaskEmployeeId(Number(e.target.value) || null)}
+              name="employeeId"
+              value={formData.employeeId}
+              onChange={handleInputChange}
             >
               <option value="">Brak</option>
               {employees.map((employee) => (
@@ -412,19 +501,16 @@ const filteredTasks = tasks.filter(task => {
           </div>
         </div>
           <div className="flex justify-end">
-          {editingTaskId ? (
+          {editingTask ? (
             <div className="flex gap-2">
               <button
-                onClick={() => {
-                  setEditingTaskId(null);
-                  resetForm();
-                }}
+                onClick={handleCancelEdit}
                 className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded"
               >
                 Anuluj
               </button>
               <button
-                onClick={() => handleEditTask(editingTaskId)}
+                onClick={handleSaveChanges}
                 className="bg-blue-700 hover:bg-blue-600 text-white px-6 py-2 rounded"
               >
                 Zapisz zmiany
@@ -602,16 +688,7 @@ const filteredTasks = tasks.filter(task => {
                 <div className="flex gap-2 mt-2 md:mt-0">
                   <button
                     className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm"
-                    onClick={() => {
-                      setTaskName(task.taskName);
-                      setTaskDescription(task.description || "");
-                      setTaskDeadline(task.dueDate || "");
-                      setTaskPriority(task.priority);
-                      setTaskStatus(task.status);
-                      setTaskOrderId(task.order?.id || null);
-                      setTaskEmployeeId(task.assignedUser?.id || null);
-                      setEditingTaskId(task.id);
-                    }}
+                    onClick={() => handleEditClick(task)}
                   >
                     Edytuj
                   </button>
@@ -625,6 +702,118 @@ const filteredTasks = tasks.filter(task => {
               </div>
             </div>
           ))
+        )}
+
+        {/* Edit form */}
+        {editingTask && (
+          <div className="bg-gray-800 p-6 rounded-lg mt-8">
+            <h2 className="text-xl font-semibold mb-4">Edytuj zadanie</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Nazwa zadania</label>
+                <input
+                  type="text"
+                  name="taskName"
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  value={formData.taskName}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Opis</label>
+                <input
+                  type="text"
+                  name="description"
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Termin</label>
+                <input
+                  type="datetime-local"
+                  name="dueDate"
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  value={formData.dueDate}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Priorytet</label>
+                <select
+                  name="priority"
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  value={formData.priority}
+                  onChange={handleInputChange}
+                >
+                  <option value="low">Niski</option>
+                  <option value="medium">Średni</option>
+                  <option value="high">Wysoki</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Status</label>
+                <select
+                  name="status"
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  value={formData.status}
+                  onChange={handleInputChange}
+                >
+                  <option value="pending">Oczekujące</option>
+                  <option value="in_progress">W trakcie</option>
+                  <option value="completed">Zakończone</option>
+                  <option value="canceled">Anulowane</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Zamówienie</label>
+                <select
+                  name="orderId"
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  value={formData.orderId}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Brak</option>
+                  {orders.map((order) => (
+                    <option key={order.id} value={order.id}>
+                      {order.id} - {order.cadaverFirstName} {order.cadaverLastName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Pracownik</label>
+                <select
+                  name="employeeId"
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  value={formData.employeeId}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Brak</option>
+                  {employees.map((employee) => (
+                    <option key={employee.id} value={employee.id}>
+                      {employee.firstName} {employee.lastName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded"
+                onClick={handleCancelEdit}
+              >
+                Anuluj
+              </button>
+              <button
+                className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                onClick={handleSaveChanges}
+              >
+                Zapisz zmiany
+              </button>
+            </div>
+          </div>
         )}
       </div>
       </div>

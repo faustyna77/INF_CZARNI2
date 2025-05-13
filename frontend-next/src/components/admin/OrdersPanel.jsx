@@ -55,16 +55,40 @@ const OrdersPanel = () => {
     const handleSaveChanges = async () => {
         try {
             const token = localStorage.getItem("token");
+            
+            // Only send the fields we're actually editing
+            const orderData = {
+                status: formData.status,
+                cadaverFirstName: formData.cadaverFirstName,
+                cadaverLastName: formData.cadaverLastName,
+                deathCertificateNumber: formData.deathCertificateNumber,
+                birthDate: formData.birthDate ? formData.birthDate + "T12:00:00.000Z" : null,
+                deathDate: formData.deathDate ? formData.deathDate + "T12:00:00.000Z" : null,
+                // Preserve existing values from editingOrder
+                orderDate: editingOrder.orderDate,
+                client: editingOrder.client,
+                user: editingOrder.user
+            };
+
             const response = await fetch(`http://localhost:8080/orders/${editingOrder.id}`, {
                 method: 'PUT',
                 headers: { 
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(orderData)
             });
+
             if (!response.ok) throw new Error('Failed to update order');
-            const updatedOrder = await response.json();
+            
+            // Refresh the orders list after update
+            const updatedOrderResponse = await fetch(`http://localhost:8080/orders/${editingOrder.id}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (!updatedOrderResponse.ok) throw new Error('Failed to fetch updated order');
+            
+            const updatedOrder = await updatedOrderResponse.json();
             setOrders(orders.map(order => order.id === updatedOrder.id ? updatedOrder : order));
             setEditingOrder(null);
         } catch (err) {

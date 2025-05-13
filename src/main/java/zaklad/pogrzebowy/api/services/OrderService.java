@@ -49,6 +49,10 @@ public class OrderService implements IOrderService {
                     existingOrder.setStatus(updatedOrder.getStatus());
                     existingOrder.setCadaverFirstName(updatedOrder.getCadaverFirstName());
                     existingOrder.setCadaverLastName(updatedOrder.getCadaverLastName());
+                    existingOrder.setDeathCertificateNumber(updatedOrder.getDeathCertificateNumber());
+                    existingOrder.setBirthDate(updatedOrder.getBirthDate());
+                    existingOrder.setDeathDate(updatedOrder.getDeathDate());
+                    existingOrder.setClient(updatedOrder.getClient());
                     existingOrder.setUser(updatedOrder.getUser());
                     return repository.save(existingOrder);
                 })
