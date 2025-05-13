@@ -1,16 +1,34 @@
 package zaklad.pogrzebowy.api.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "task_assignments")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class TaskAssignment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "task_id", nullable = false)
+    @JsonIgnoreProperties({"assignments", "assignedUser", "order"})
+    private Task task;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"assignedTasks", "passwordHash", "plainPassword", "email"})
+    private User user;
+
+    @Column(name = "assigned_at", nullable = false)
+    private LocalDateTime assignedAt;
+
+    // Constructors
+    public TaskAssignment() {
+        this.assignedAt = LocalDateTime.now();
+    }
 
     public TaskAssignment(Task task, User user, LocalDateTime assignedAt) {
         this.task = task;
@@ -18,20 +36,37 @@ public class TaskAssignment {
         this.assignedAt = assignedAt;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // Getters
+    public Long getId() {
+        return id;
+    }
 
-    private Long id;
+    public Task getTask() {
+        return task;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "task_id", nullable = false)
-    private Task task;
+    public User getUser() {
+        return user;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    public LocalDateTime getAssignedAt() {
+        return assignedAt;
+    }
 
-    @Column(name = "assigned_at", nullable = false)
-    private LocalDateTime assignedAt = LocalDateTime.now();
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setAssignedAt(LocalDateTime assignedAt) {
+        this.assignedAt = assignedAt;
+    }
 }

@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const NewOrderForm = () => {
-  const navigate = useNavigate();
-  const [success, setSuccess] = useState(null); 
+const Receptionist = () => {
   const [formData, setFormData] = useState({
     client: {
       firstName: '',
       lastName: '',
       phone: '',
-      email: '',
-      address: ''
+      email: ''
     },
     deceased: {
       firstName: '',
@@ -18,15 +14,35 @@ const NewOrderForm = () => {
       birthDate: '',
       deathDate: '',
       deathCertificateNumber: ''
-    },
-    services: {
-      bodyCollection: false,
-      coffinPurchase: false,
-      funeralCeremony: false
     }
   });
+  const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const response = await fetch('http://localhost:8080/users/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch user data');
+        const userData = await response.json();
+        setCurrentUser(userData);
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   const handleClientChange = (e) => {
     const { name, value } = e.target;
@@ -41,14 +57,6 @@ const NewOrderForm = () => {
     setFormData(prev => ({
       ...prev,
       deceased: { ...prev.deceased, [name]: value }
-    }));
-  };
-
-  const handleServiceChange = (e) => {
-    const { name, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      services: { ...prev.services, [name]: checked }
     }));
   };
 
@@ -73,12 +81,26 @@ const NewOrderForm = () => {
       if (!clientResponse.ok) throw new Error('Błąd podczas tworzenia klienta');
       const client = await clientResponse.json();
 
-      // Create Order
+      // Helper function to convert date to datetime
+      const convertToDateTime = (dateStr) => {
+        if (!dateStr) return null;
+        const date = new Date(dateStr);
+        // Set time to noon (12:00:00) to avoid timezone issues
+        date.setHours(12, 0, 0, 0);
+        return date.toISOString();
+      };
+
+      // Create Order with all dates properly formatted
       const orderData = {
         cadaverFirstName: formData.deceased.firstName,
         cadaverLastName: formData.deceased.lastName,
+        deathCertificateNumber: formData.deceased.deathCertificateNumber,
+        birthDate: convertToDateTime(formData.deceased.birthDate),
+        deathDate: convertToDateTime(formData.deceased.deathDate),
         client: { id: client.id },
-        status: 'pending'
+        status: 'pending',
+        orderDate: new Date().toISOString(),
+        user: { id: currentUser.id }
       };
 
       const orderResponse = await fetch('http://localhost:8080/orders', {
@@ -92,207 +114,169 @@ const NewOrderForm = () => {
 
       if (!orderResponse.ok) throw new Error('Błąd podczas tworzenia zlecenia');
       
-      setSuccess('Zlecenie zostało pomyślnie utworzone!'); // Set success message
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+      setSuccess('Zlecenie zostało pomyślnie utworzone!');
+      // Reset form
+      setFormData({
+        client: {
+          firstName: '',
+          lastName: '',
+          phone: '',
+          email: ''
+        },
+        deceased: {
+          firstName: '',
+          lastName: '',
+          birthDate: '',
+          deathDate: '',
+          deathCertificateNumber: ''
+        }
+      });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto font-serif border border-gray-700 rounded overflow-hidden shadow-lg">
-      <form onSubmit={handleSubmit} className="p-5 bg-gray-800">
+    <div className="container mx-auto p-4 bg-gray-900 text-gray-100">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
-          <div className="mb-4 p-3 bg-red-800 text-red-200 rounded">
-            Błąd: {error}
+          <div className="p-4 bg-red-900 text-red-100 rounded-lg">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="p-4 bg-green-900 text-green-100 rounded-lg">
+            {success}
           </div>
         )}
 
-        {success && ( // Place this block here
-            <div className="mb-4 p-3 bg-green-800 text-green-200 rounded">
-              {success}
-            </div>
-          )}
-
-        <div className="flex flex-wrap gap-5 mb-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Client Data Section */}
-          <div className="flex-1 min-w-[300px] bg-gray-700 p-4 rounded shadow">
-            <div className="bg-gray-900 text-gray-300 p-2 text-center mb-4 rounded font-serif tracking-wide border-b border-gray-500">
+          <div className="bg-gray-800 p-6 rounded-lg">
+            <h2 className="text-xl font-semibold mb-4 pb-2 border-b border-gray-700">
               Dane klienta
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">imię</label>
-              <input
-                type="text"
-                name="firstName"
-                value={formData.client.firstName}
-                onChange={handleClientChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">nazwisko</label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.client.lastName}
-                onChange={handleClientChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">numer telefonu</label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.client.phoneNumber}
-                onChange={handleClientChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">adres e-mail</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.client.email}
-                onChange={handleClientChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">adres zamieszkania</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.client.address}
-                onChange={handleClientChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-                required
-              />
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Imię</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.client.firstName}
+                  onChange={handleClientChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Nazwisko</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.client.lastName}
+                  onChange={handleClientChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Telefon</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.client.phone}
+                  onChange={handleClientChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.client.email}
+                  onChange={handleClientChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                />
+              </div>
             </div>
           </div>
 
           {/* Deceased Data Section */}
-          <div className="flex-1 min-w-[300px] bg-gray-700 p-4 rounded shadow">
-            <div className="bg-gray-900 text-gray-300 p-2 text-center mb-4 rounded font-serif tracking-wide border-b border-gray-500">
+          <div className="bg-gray-800 p-6 rounded-lg">
+            <h2 className="text-xl font-semibold mb-4 pb-2 border-b border-gray-700">
               Dane osoby zmarłej
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">imię</label>
-              <input
-                type="text"
-                name="firstName"
-                value={formData.deceased.firstName}
-                onChange={handleDeceasedChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">nazwisko</label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.deceased.lastName}
-                onChange={handleDeceasedChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">data urodzenia</label>
-              <input
-                type="date"
-                name="birthDate"
-                value={formData.deceased.birthDate}
-                onChange={handleDeceasedChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">data zgonu</label>
-              <input
-                type="date"
-                name="deathDate"
-                value={formData.deceased.deathDate}
-                onChange={handleDeceasedChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1 text-sm text-gray-400 italic">numer aktu zgonu</label>
-              <input
-                type="text"
-                name="deathCertificateNumber"
-                value={formData.deceased.deathCertificateNumber}
-                onChange={handleDeceasedChange}
-                className="w-full p-2 bg-gray-800 border border-gray-600 rounded text-sm text-gray-300"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Services Section */}
-          <div className="flex-1 min-w-[300px] bg-gray-700 p-4 rounded shadow">
-            <div className="bg-gray-900 text-gray-300 p-2 text-center mb-4 rounded font-serif tracking-wide border-b border-gray-500">
-              Usługi
-            </div>
-            <div className="flex items-center mb-3">
-              <input
-                type="checkbox"
-                id="bodyCollection"
-                name="bodyCollection"
-                checked={formData.services.bodyCollection}
-                onChange={handleServiceChange}
-                className="mr-2 accent-gray-500"
-              />
-              <label htmlFor="bodyCollection" className="text-sm text-gray-400">
-                odebranie ciała przez zakład
-              </label>
-            </div>
-            <div className="flex items-center mb-3">
-              <input
-                type="checkbox"
-                id="coffinPurchase"
-                name="coffinPurchase"
-                checked={formData.services.coffinPurchase}
-                onChange={handleServiceChange}
-                className="mr-2 accent-gray-500"
-              />
-              <label htmlFor="coffinPurchase" className="text-sm text-gray-400">
-                zakup trumny
-              </label>
-            </div>
-            <div className="flex items-center mb-3">
-              <input
-                type="checkbox"
-                id="funeralCeremony"
-                name="funeralCeremony"
-                checked={formData.services.funeralCeremony}
-                onChange={handleServiceChange}
-                className="mr-2 accent-gray-500"
-              />
-              <label htmlFor="funeralCeremony" className="text-sm text-gray-400">
-                ceremonia pochówku
-              </label>
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Imię</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.deceased.firstName}
+                  onChange={handleDeceasedChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Nazwisko</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.deceased.lastName}
+                  onChange={handleDeceasedChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Data urodzenia</label>
+                <input
+                  type="date"
+                  name="birthDate"
+                  value={formData.deceased.birthDate}
+                  onChange={handleDeceasedChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Data zgonu</label>
+                <input
+                  type="date"
+                  name="deathDate"
+                  value={formData.deceased.deathDate}
+                  onChange={handleDeceasedChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 mb-1 text-sm">Numer aktu zgonu</label>
+                <input
+                  type="text"
+                  name="deathCertificateNumber"
+                  value={formData.deceased.deathCertificateNumber}
+                  onChange={handleDeceasedChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-gray-200"
+                  required
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-6">
           <button
             type="submit"
             disabled={loading}
-            className="bg-gray-600 hover:bg-gray-500 text-gray-300 border-none px-8 py-3 text-base rounded uppercase font-serif tracking-wide shadow transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-blue-700 hover:bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Przetwarzanie...' : 'DODAJ'}
+            {loading ? 'Przetwarzanie...' : 'Utwórz zlecenie'}
           </button>
         </div>
       </form>
@@ -300,4 +284,4 @@ const NewOrderForm = () => {
   );
 };
 
-export default NewOrderForm;
+export default Receptionist;

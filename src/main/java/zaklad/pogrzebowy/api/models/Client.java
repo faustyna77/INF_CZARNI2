@@ -56,4 +56,7 @@ public class Client {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

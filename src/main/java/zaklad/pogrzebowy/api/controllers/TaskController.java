@@ -2,12 +2,14 @@ package zaklad.pogrzebowy.api.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zaklad.pogrzebowy.api.models.Task;
 import zaklad.pogrzebowy.api.services.TaskService;
+import zaklad.pogrzebowy.api.dto.TaskDTO;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
@@ -17,42 +19,71 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    // Pobranie wszystkich zadań
     @GetMapping
-    public List<Task> getAllTasks() {
-        return taskService.findAll();
+    public ResponseEntity<List<TaskDTO>> getAllTasks() {
+        List<Task> tasks = taskService.findAll();
+        List<TaskDTO> taskDTOs = tasks.stream()
+            .map(TaskDTO::new)
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(taskDTOs);
     }
 
-
-    // Pobranie zadania po ID
     @GetMapping("/{id}")
-    public Optional<Task> getTaskById(@PathVariable Long id) {
-        return taskService.findById(id);
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
+        return taskService.findById(id)
+            .map(task -> ResponseEntity.ok(new TaskDTO(task)))
+            .orElse(ResponseEntity.notFound().build());
     }
 
-    // Pobranie zadań po statusie
     @GetMapping("/status/{status}")
-    public List<Task> getTasksByStatus(@PathVariable Task.Status status) {
-        return taskService.findByStatus(status);
+    public ResponseEntity<List<TaskDTO>> getTasksByStatus(@PathVariable Task.Status status) {
+        List<Task> tasks = taskService.findByStatus(status);
+        List<TaskDTO> taskDTOs = tasks.stream()
+            .map(TaskDTO::new)
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(taskDTOs);
     }
 
-    // Dodanie nowego zadania
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@RequestBody Task task) {
-        return taskService.create(task);
+    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+        try {
+            Task task = taskDTO.toEntity();
+            Task savedTask = taskService.create(task);
+            return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new TaskDTO(savedTask));
+        } catch (Exception e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .build();
+        }
     }
 
-    // Aktualizacja zadania
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-        return taskService.update(id, task);
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+        try {
+            Task taskToUpdate = taskDTO.toEntity();
+            taskToUpdate.setId(id);
+            Task updatedTask = taskService.update(id, taskToUpdate);
+            return ResponseEntity.ok(new TaskDTO(updatedTask));
+        } catch (Exception e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .build();
+        }
     }
 
-    // Usunięcie zadania
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTask(@PathVariable Long id) {
-        taskService.delete(id);
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        try {
+            taskService.delete(id);
+            return ResponseEntity
+                .noContent()
+                .build();
+        } catch (Exception e) {
+            return ResponseEntity
+                .notFound()
+                .build();
+        }
     }
 }

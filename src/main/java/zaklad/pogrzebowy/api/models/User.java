@@ -2,9 +2,13 @@ package zaklad.pogrzebowy.api.models;
 
 import jakarta.persistence.*;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import java.util.HashSet;
+import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -30,6 +34,10 @@ public class User {
     @Transient
     private String plainPassword;
 
+    @OneToMany(mappedBy = "assignedUser")
+    @JsonIgnoreProperties("assignedUser")
+    private Set<Task> assignedTasks = new HashSet<>();
+
     public enum Role {
         ADMIN, USER
     }
@@ -42,7 +50,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.passwordHash = passwordHash;  // Store plain password temporarily
+        this.passwordHash = passwordHash;
         this.role = role;
     }
 
@@ -103,6 +111,14 @@ public class User {
         this.plainPassword = plainPassword;
     }
 
+    public Set<Task> getAssignedTasks() {
+        return assignedTasks;
+    }
+
+    public void setAssignedTasks(Set<Task> assignedTasks) {
+        this.assignedTasks = assignedTasks;
+    }
+
     // Password verification
     public boolean verifyPassword(String inputPassword) {
         if (this.passwordHash == null || inputPassword == null) {
@@ -110,5 +126,4 @@ public class User {
         }
         return BCrypt.checkpw(inputPassword, this.passwordHash);
     }
-
 }

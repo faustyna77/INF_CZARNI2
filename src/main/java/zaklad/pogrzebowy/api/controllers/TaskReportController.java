@@ -15,49 +15,43 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/reports")
-@CrossOrigin(origins = "*")  // Dodane dla obsługi CORS
+@CrossOrigin(origins = "*")
 public class TaskReportController {
 
     @Autowired
     private TaskReportService reportService;
 
-    @PostMapping(value = "/tasks", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<InputStreamResource> generateTaskReport(@RequestBody Map<String, Object> request,
-                                                                  @RequestHeader("Authorization") String authHeader) {
-        // Pobierz parametry z żądania
+    @PostMapping(value = "/tasks", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> generateTaskReport(
+            @RequestBody Map<String, Object> request,
+            @RequestHeader("Authorization") String authHeader) {
+
         Map<String, Object> filters = (Map<String, Object>) request.get("filters");
-        String reportType = (String) request.get("reportType");
+        ByteArrayInputStream reportStream = reportService.generateReport(filters);
 
-        // Generowanie nazwy pliku z bieżącą datą
+        // Generate filename with timestamp
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String filename = "zadania_raport_" + timestamp + ".html";
+        String filename = "raport_zadan_" + timestamp + ".pdf";
 
-        // Generowanie raportu HTML
-        ByteArrayInputStream reportStream = reportService.generateReport(filters, reportType);
-
-        // Konfiguracja nagłówków odpowiedzi
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=" + filename);
-        headers.add("Access-Control-Allow-Origin", "*");  // Dodane dla CORS
+        headers.add("Access-Control-Expose-Headers", "Content-Disposition");
 
         return ResponseEntity
                 .ok()
                 .headers(headers)
-                .contentType(MediaType.TEXT_HTML)
+                .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(reportStream));
     }
 
-    // Dodajemy metodę OPTIONS dla CORS preflight requests
     @RequestMapping(value = "/tasks", method = RequestMethod.OPTIONS)
     public ResponseEntity<?> handleOptions() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Access-Control-Allow-Origin", "*");
-        headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        headers.add("Access-Control-Allow-Methods", "POST, OPTIONS");
         headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        headers.add("Access-Control-Expose-Headers", "Content-Disposition");
 
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .build();
+        return ResponseEntity.ok().headers(headers).build();
     }
 }

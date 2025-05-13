@@ -11,4 +11,5 @@ public interface TaskAssignmentRepository extends JpaRepository<TaskAssignment, 
     List<TaskAssignment> findByUserId(Long userId);
     List<TaskAssignment> findByTaskId(Long taskId);
     void deleteAllByUserId(Long userId);
+    void deleteAllByTaskId(Long taskId);
 }

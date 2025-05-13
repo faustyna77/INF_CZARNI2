@@ -1,0 +1,130 @@
+package zaklad.pogrzebowy.api.dto;
+
+import zaklad.pogrzebowy.api.models.Task;
+import zaklad.pogrzebowy.api.models.Order;
+import zaklad.pogrzebowy.api.models.User;
+import java.time.LocalDateTime;
+
+public class TaskDTO {
+    private Long id;
+    private String taskName;
+    private String description;
+    private LocalDateTime dueDate;
+    private String priority;
+    private String status;
+    private UserDTO assignedUser;
+    private OrderDTO order;
+
+    // Constructors
+    public TaskDTO() {}
+
+    public TaskDTO(Task task) {
+        this.id = task.getId();
+        this.taskName = task.getTaskName();
+        this.description = task.getDescription();
+        this.dueDate = task.getDueDate();
+        this.priority = task.getPriority().toString();
+        this.status = task.getStatus().toString();
+        this.assignedUser = task.getAssignedUser() != null ? new UserDTO(task.getAssignedUser()) : null;
+        this.order = task.getOrder() != null ? new OrderDTO(task.getOrder()) : null;
+    }
+
+    // Getters
+    public Long getId() {
+        return id;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public UserDTO getAssignedUser() {
+        return assignedUser;
+    }
+
+    public OrderDTO getOrder() {
+        return order;
+    }
+
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setAssignedUser(UserDTO assignedUser) {
+        this.assignedUser = assignedUser;
+    }
+
+    public void setOrder(OrderDTO order) {
+        this.order = order;
+    }
+
+    public Task toEntity() {
+        Task task = new Task();
+        task.setId(this.id);
+        task.setTaskName(this.taskName);
+        task.setDescription(this.description);
+        task.setDueDate(this.dueDate);
+        
+        // Convert String to Priority enum
+        if (this.priority != null) {
+            task.setPriority(Task.Priority.valueOf(this.priority.toLowerCase()));
+        }
+        
+        // Convert String to Status enum
+        if (this.status != null) {
+            task.setStatus(Task.Status.valueOf(this.status.toLowerCase()));
+        }
+
+        
+        if (this.order != null) {
+            Order orderEntity = new Order();
+            orderEntity.setId(this.order.getId());
+            task.setOrder(orderEntity);
+        }
+        
+        if (this.assignedUser != null) {
+            User userEntity = new User();
+            userEntity.setId(this.assignedUser.getId());
+            task.setAssignedUser(userEntity);
+        }
+        
+        return task;
+    }
+}
