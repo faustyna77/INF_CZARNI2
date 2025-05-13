@@ -5,6 +5,32 @@ import OrdersPanel from '../../components/admin/OrdersPanel';
 const Admin = () => {
     const [activePanel, setActivePanel] = useState('users');
 
+    const generateUserReport = async () => {
+        const token = localStorage.getItem("token");
+
+        try {
+            const response = await fetch("http://localhost:8080/reports/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ filters: {} }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Błąd: ${response.status} ${response.statusText}`);
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+        } catch (err) {
+            console.error("Błąd generowania raportu:", err);
+            alert(`Wystąpił błąd: ${err.message}`);
+        }
+    };
+
     return (
         <div style={styles.container}>
             <div style={styles.header}>
@@ -29,6 +55,21 @@ const Admin = () => {
                         📋 Zamówienia
                     </button>
                 </div>
+
+                {/* PDF button dla użytkowników */}
+                {activePanel === 'users' && (
+                    <div style={{ textAlign: 'center', marginTop: '8px' }}>
+                        <button 
+                            onClick={generateUserReport}
+                            style={{
+                                ...styles.tabButton,
+                                backgroundColor: '#00aa88'
+                            }}
+                        >
+                            📄 Generuj PDF (Użytkownicy)
+                        </button>
+                    </div>
+                )}
             </div>
 
             <div style={styles.contentContainer}>
@@ -58,7 +99,8 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         gap: '16px',
-        marginBottom: '24px'
+        marginBottom: '16px',
+        flexWrap: 'wrap'
     },
     tabButton: {
         padding: '12px 24px',
@@ -68,16 +110,10 @@ const styles = {
         borderRadius: '8px',
         cursor: 'pointer',
         fontSize: '16px',
-        transition: 'all 0.2s ease',
-        '&:hover': {
-            backgroundColor: '#4a4a4a'
-        }
+        transition: 'all 0.2s ease'
     },
     activeTab: {
-        backgroundColor: '#9900ff',
-        '&:hover': {
-            backgroundColor: '#8400db'
-        }
+        backgroundColor: '#9900ff'
     },
     contentContainer: {
         backgroundColor: '#343434',
