@@ -4,11 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import zaklad.pogrzebowy.api.models.User;  
+import zaklad.pogrzebowy.api.repositories.UserRepository;  
 import zaklad.pogrzebowy.api.models.Task;
+import zaklad.pogrzebowy.api.security.JwtUtil;
 import zaklad.pogrzebowy.api.services.TaskService;
 import zaklad.pogrzebowy.api.dto.TaskDTO;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -18,6 +24,12 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+    
+    @Autowired
+    private JwtUtil jwtUtil;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<List<TaskDTO>> getAllTasks() {
@@ -60,16 +72,38 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody Map<String, String> updates) {
         try {
-            Task taskToUpdate = taskDTO.toEntity();
-            taskToUpdate.setId(id);
-            Task updatedTask = taskService.update(id, taskToUpdate);
-            return ResponseEntity.ok(new TaskDTO(updatedTask));
+            Optional<Task> taskOpt = taskService.findById(id);
+            if (taskOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Task task = taskOpt.get();
+
+            // Handle partial update - only status
+            if (updates.containsKey("status")) {
+                try {
+                    String newStatus = updates.get("status").toLowerCase(); // Convert to lowercase
+                    System.out.println("Attempting to update status to: " + newStatus); // Debug log
+                    
+                    // Validate the status is a valid enum value
+                    Task.Status status = Task.Status.valueOf(newStatus);
+                    task.setStatus(status);
+                    
+                    Task updatedTask = taskService.update(id, task);
+                    return ResponseEntity.ok(new TaskDTO(updatedTask));
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid status value: " + updates.get("status")); // Debug log
+                    e.printStackTrace();
+                    return ResponseEntity.badRequest().body(null);
+                }
+            }
+
+            return ResponseEntity.badRequest().body(null);
         } catch (Exception e) {
-            return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .build();
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -84,6 +118,31 @@ public class TaskController {
             return ResponseEntity
                 .notFound()
                 .build();
+        }
+    }
+
+    @GetMapping("/assigned")
+    public ResponseEntity<List<TaskDTO>> getAssignedTasks(@RequestHeader("Authorization") String token) {
+        try {
+            if (token == null || !token.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            String jwt = token.substring(7);
+            String userEmail = jwtUtil.extractUsername(jwt);
+            User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Get tasks assigned to the user
+            List<Task> tasks = taskService.findTasksAssignedToUser(user.getId());
+            List<TaskDTO> taskDTOs = tasks.stream()
+                .map(TaskDTO::new)
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok(taskDTOs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }

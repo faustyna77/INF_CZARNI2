@@ -41,12 +41,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/users/**").permitAll() // Temporarily before token implementation
+                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/tasks/assigned").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/tasks/**").hasAnyRole("USER", "ADMIN") // Allow both roles to access tasks
                         .requestMatchers("/clients/**").authenticated()
                         .requestMatchers("/users/me").authenticated()
-                        .requestMatchers("/tasks/**").authenticated()
-                        .requestMatchers("/reports/**").authenticated() // Dodana linia dla endpointów raportu
-                        .requestMatchers("/api/task-report").authenticated() // Dodana linia dla alternatywnego endpointu
+                        .requestMatchers("/reports/**").authenticated()
+                        .requestMatchers("/api/task-report").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -3,6 +3,7 @@ package zaklad.pogrzebowy.api.dto;
 import zaklad.pogrzebowy.api.models.Task;
 import zaklad.pogrzebowy.api.models.Order;
 import zaklad.pogrzebowy.api.models.User;
+import zaklad.pogrzebowy.api.models.TaskAssignment;
 import java.time.LocalDateTime;
 
 public class TaskDTO {
@@ -14,6 +15,7 @@ public class TaskDTO {
     private String status;
     private UserDTO assignedUser;
     private OrderDTO order;
+    private LocalDateTime assignedAt; // Add this field
 
     // Constructors
     public TaskDTO() {}
@@ -27,6 +29,11 @@ public class TaskDTO {
         this.status = task.getStatus().toString();
         this.assignedUser = task.getAssignedUser() != null ? new UserDTO(task.getAssignedUser()) : null;
         this.order = task.getOrder() != null ? new OrderDTO(task.getOrder()) : null;
+        // Get assignedAt from the most recent task assignment
+        this.assignedAt = task.getAssignments().stream()
+            .map(TaskAssignment::getAssignedAt)
+            .max(LocalDateTime::compareTo)
+            .orElse(null);
     }
 
     // Getters
@@ -62,6 +69,10 @@ public class TaskDTO {
         return order;
     }
 
+    public LocalDateTime getAssignedAt() {
+        return assignedAt;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -93,6 +104,10 @@ public class TaskDTO {
 
     public void setOrder(OrderDTO order) {
         this.order = order;
+    }
+
+    public void setAssignedAt(LocalDateTime assignedAt) {
+        this.assignedAt = assignedAt;
     }
 
     public Task toEntity() {

@@ -1,12 +1,16 @@
 // RootLayout.jsx
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Navigation from '../layouts/Navigation.jsx';  
 
 const RootLayout = ({ token, setToken }) => {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
     setToken(null);
+    navigate("/log");
   };
 
   return (

@@ -1,6 +1,6 @@
 import { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import App from "./pages/App.jsx";
 import Profile from "./pages/Profile.jsx";
 import Raports from "./pages/Raports.jsx";
@@ -10,17 +10,71 @@ import RootLayout from "./layouts/RootLayout.jsx";
 import "./styles/index.css";
 import TaskPlans from "./pages/TaskPlans.jsx";
 import Recepcionist from "./pages/Receptionist.jsx";
+import TaskWork from "./pages/TaskWork.jsx";
 
 // 🔧 Komponent z tokenem globalnym
 const Root = () => {
   const [token, setToken] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
+      fetchUserRole(storedToken);
+    } else {
+      setLoading(false);
     }
   }, []);
+
+  const fetchUserRole = async (token) => {
+    try {
+      const response = await fetch('http://localhost:8080/users/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) throw new Error('Failed to fetch user data');
+      const userData = await response.json();
+      localStorage.setItem("userRole", userData.role); // Store role in localStorage
+      setUserRole(userData.role);
+    } catch (err) {
+      console.error('Error fetching user role:', err);
+      setToken(null);
+      localStorage.removeItem('token');
+      localStorage.removeItem('userRole');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Protected Route Component
+  const ProtectedTaskRoute = () => {
+    console.log('Current role:', userRole); // Debug log
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (!token) {
+      return <Navigate to="/log" replace />;
+    }
+
+    // Make sure we have a role before deciding
+    if (!userRole) {
+      return <div>Loading user role...</div>;
+    }
+
+    if (userRole === 'ADMIN') {
+      return <TaskPlans />;
+    } else if (userRole === 'USER') {
+      return <TaskWork />;
+    }
+
+    // If role doesn't match expected values, redirect to home
+    return <Navigate to="/" replace />;
+  };
 
   const router = createBrowserRouter([
     {
@@ -33,24 +87,24 @@ const Root = () => {
         },
         {
           path: "/profile",
-          element: <Profile token={token} />
+          element: token ? <Profile token={token} /> : <Navigate to="/log" replace />
         },
         {
           path: "/admin",
-          element: <Admin token={token} />
-        },
-        {
-          path: "/raports",
-          element: <Raports token={token} />
+          element: userRole === 'ADMIN' ? <Admin token={token} /> : <Navigate to="/" replace />
         },
         {
           path: "/tasks",
-          element: <TaskPlans token={token} />
+          element: <ProtectedTaskRoute />
+        },
+        {
+          path: "/raports",
+          element: userRole === 'ADMIN' ? <Raports token={token} /> : <Navigate to="/" replace />
         },
         {
           path: "/recepcionist",
-          element: <Recepcionist token={token} />
-        },
+          element: token ? <Recepcionist token={token} /> : <Navigate to="/log" replace />
+        }
       ]
     },
     {
@@ -62,6 +116,10 @@ const Root = () => {
       element: <h1>404 - Strona nie istnieje</h1>
     }
   ]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return <RouterProvider router={router} />;
 };

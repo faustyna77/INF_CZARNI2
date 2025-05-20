@@ -15,4 +15,5 @@ public interface ITaskService {
     Task create(Task task);
     Task update(Long id, Task task);
     void delete(Long id);
+    List<Task> findTasksAssignedToUser(Long userId);
 }

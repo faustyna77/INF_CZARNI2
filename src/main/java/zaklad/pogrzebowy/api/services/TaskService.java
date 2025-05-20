@@ -2,6 +2,7 @@ package zaklad.pogrzebowy.api.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import zaklad.pogrzebowy.api.models.Task;
 import zaklad.pogrzebowy.api.models.Order;
 import zaklad.pogrzebowy.api.models.User;
@@ -17,8 +18,8 @@ import java.util.Optional;
 
 
 @Service
+@Transactional 
 public class TaskService implements ITaskService {
-
     @Autowired
     private TaskRepository taskRepository;
     
@@ -32,21 +33,25 @@ public class TaskService implements ITaskService {
     private TaskAssignmentRepository taskAssignmentRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Task> findAll() {
         return taskRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Task> findById(Long id) {
         return taskRepository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Task> findByStatus(Task.Status status) {
         return taskRepository.findByStatus(status);
     }
 
     @Override
+    @Transactional
     public Task create(Task task) {
         try {
             // Create a new Task entity
@@ -99,6 +104,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
+    @Transactional
     public Task update(Long id, Task task) {
         return taskRepository.findById(id)
             .map(existingTask -> {
@@ -107,7 +113,7 @@ public class TaskService implements ITaskService {
                 existingTask.setDueDate(task.getDueDate());
                 existingTask.setPriority(task.getPriority());
                 existingTask.setStatus(task.getStatus());
-
+                
                 // Handle order update
                 if (task.getOrder() != null && task.getOrder().getId() != null) {
                     Order order = orderRepository.findById(task.getOrder().getId())
@@ -121,10 +127,8 @@ public class TaskService implements ITaskService {
                 if (task.getAssignedUser() != null && task.getAssignedUser().getId() != null) {
                     User user = userRepository.findById(task.getAssignedUser().getId())
                         .orElseThrow(() -> new RuntimeException("User not found"));
-                    
                     existingTask.setAssignedUser(user);
                     
-                    // Update task assignment
                     taskAssignmentRepository.deleteAllByTaskId(existingTask.getId());
                     TaskAssignment assignment = new TaskAssignment();
                     assignment.setTask(existingTask);
@@ -135,7 +139,7 @@ public class TaskService implements ITaskService {
                     existingTask.setAssignedUser(null);
                     taskAssignmentRepository.deleteAllByTaskId(existingTask.getId());
                 }
-
+                
                 return taskRepository.save(existingTask);
             })
             .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -159,5 +163,11 @@ public class TaskService implements ITaskService {
         }
 
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Task> findTasksAssignedToUser(Long userId) {
+        return taskRepository.findByAssignedUserId(userId);
     }
 }
