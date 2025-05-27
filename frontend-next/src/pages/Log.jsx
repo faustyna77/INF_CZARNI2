@@ -16,10 +16,31 @@ const Log = ({ setToken }) => {
       });
 
       const token = response.data.token;
+      
+      // First set the token
       setToken(token);
       localStorage.setItem("token", token);
-      alert("Zalogowano pomyślnie!");
-      navigate("/");
+
+      // Then fetch user data immediately
+      const userResponse = await fetch("http://localhost:8080/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        localStorage.setItem("userRole", userData.role);
+        
+        // Navigate first
+        navigate("/");
+        
+        // Then show success message and refresh
+        setTimeout(() => {
+          alert("Zalogowano pomyślnie!");
+          window.location.reload();
+        }, 100);
+      }
     } catch (error) {
       console.error("Błąd logowania:", error);
       alert("Nieprawidłowy login lub hasło!");
@@ -28,8 +49,13 @@ const Log = ({ setToken }) => {
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-900">
-      <form className="flex flex-col p-10 rounded-lg bg-gray-800 shadow-2xl w-80" onSubmit={handleLogin}>
-        <h2 className="mb-6 text-2xl font-bold text-center text-gray-200">Logowanie</h2>
+      <form
+        className="flex flex-col p-10 rounded-lg bg-gray-800 shadow-2xl w-80"
+        onSubmit={handleLogin}
+      >
+        <h2 className="mb-6 text-2xl font-bold text-center text-gray-200">
+          Logowanie
+        </h2>
         <input
           type="email"
           placeholder="Email"

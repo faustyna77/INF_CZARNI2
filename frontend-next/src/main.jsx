@@ -14,40 +14,41 @@ import TaskWork from "./pages/TaskWork.jsx";
 
 // 🔧 Komponent z tokenem globalnym
 const Root = () => {
-  const [token, setToken] = useState(null);
-  const [userRole, setUserRole] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-      fetchUserRole(storedToken);
-    } else {
-      setLoading(false);
-    }
-  }, []);
+    const fetchUserRole = async () => {
+      if (!token) {
+        setLoading(false);
+        setUserRole(null);
+        return;
+      }
 
-  const fetchUserRole = async (token) => {
-    try {
-      const response = await fetch('http://localhost:8080/users/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response.ok) throw new Error('Failed to fetch user data');
-      const userData = await response.json();
-      localStorage.setItem("userRole", userData.role); // Store role in localStorage
-      setUserRole(userData.role);
-    } catch (err) {
-      console.error('Error fetching user role:', err);
-      setToken(null);
-      localStorage.removeItem('token');
-      localStorage.removeItem('userRole');
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        const response = await fetch('http://localhost:8080/users/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (!response.ok) throw new Error('Failed to fetch user data');
+        const userData = await response.json();
+        setUserRole(userData.role);
+        localStorage.setItem("userRole", userData.role);
+      } catch (err) {
+        console.error('Error fetching user role:', err);
+        setToken(null);
+        setUserRole(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('userRole');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserRole();
+  }, [token]);
 
   // Protected Route Component
   const ProtectedTaskRoute = () => {
@@ -79,7 +80,7 @@ const Root = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <RootLayout token={token} setToken={setToken} />,
+      element: <RootLayout token={token} setToken={setToken} userRole={userRole} />,
       children: [
         {
           path: "/",

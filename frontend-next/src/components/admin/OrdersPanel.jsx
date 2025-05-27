@@ -227,86 +227,85 @@ const OrdersPanel = () => {
 
 const styles = {
     container: {
-        padding: '20px',
-        backgroundColor: '#2a2828',
+        backgroundColor: '#1F2937', // bg-gray-800 (lighter than parent)
         borderRadius: '8px',
-        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        color: "white",
-    },
-    header: {
-        textAlign: 'center',
-        color: 'white',
+        padding: '20px'
     },
     table: {
         width: '100%',
         borderCollapse: 'collapse',
         marginTop: '20px',
+        backgroundColor: '#374151' // bg-gray-700 (even lighter)
     },
     th: {
         padding: '12px',
         textAlign: 'left',
-        backgroundColor: '#2f0031',
+        backgroundColor: '#374151', // bg-gray-700 instead of #2f0031
         color: 'white',
-        fontWeight: 'bold',
+        fontWeight: 'bold'
     },
     td: {
         padding: '12px',
         textAlign: 'left',
-        borderBottom: '1px solid #ddd',
+        borderBottom: '1px solid #4B5563' // bg-gray-600
     },
     tr: {
         transition: 'background-color 0.3s',
+        '&:hover': {
+            backgroundColor: '#374151' // bg-gray-700
+        }
     },
     button: {
         padding: '8px 16px',
-        backgroundColor: '#9900ff',
+        backgroundColor: '#7C3AED', // bg-purple-600 instead of #9900ff
         color: 'white',
         border: 'none',
         borderRadius: '4px',
         cursor: 'pointer',
         fontSize: '14px',
         margin: '5px',
+        '&:hover': {
+            backgroundColor: '#6D28D9' // bg-purple-700
+        }
     },
     deleteButton: {
         padding: '8px 16px',
-        backgroundColor: '#ff4444',
+        backgroundColor: '#DC2626', // bg-red-600 instead of #ff4444
         color: 'white',
         border: 'none',
         borderRadius: '4px',
         cursor: 'pointer',
         fontSize: '14px',
         margin: '5px',
+        '&:hover': {
+            backgroundColor: '#B91C1C' // bg-red-700
+        }
     },
     editForm: {
-        backgroundColor: '#2a2828',
+        backgroundColor: '#1F2937', // bg-gray-800 instead of #2a2828
         color: 'white',
         borderRadius: '8px',
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
         maxWidth: '500px',
         margin: '20px auto',
-        padding: '20px',
+        padding: '20px'
     },
     input: {
         width: '100%',
         padding: '10px',
         marginBottom: '10px',
         borderRadius: '4px',
-        border: '1px solid #ccc',
+        border: '1px solid #4B5563', // bg-gray-600
         fontSize: '16px',
-        backgroundColor: '#444',
+        backgroundColor: '#374151', // bg-gray-700 instead of #444
         color: 'white'
     },
-    loading: {
-        color: 'white',
-        textAlign: 'center',
-        padding: '20px'
-    },
-    error: {
-        color: 'red',
-        textAlign: 'center',
-        padding: '20px'
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '20px',
+        color: 'white'
     }
 };
 

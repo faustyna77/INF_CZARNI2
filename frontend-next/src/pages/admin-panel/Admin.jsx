@@ -82,7 +82,6 @@ const Admin = () => {
 const styles = {
     container: {
         padding: '20px',
-        backgroundColor: '#2a2828',
         minHeight: 'calc(100vh - 40px)',
         color: 'white'
     },
@@ -104,7 +103,7 @@ const styles = {
     },
     tabButton: {
         padding: '12px 24px',
-        backgroundColor: '#343434',
+        backgroundColor: '#374151', // bg-gray-700
         color: 'white',
         border: 'none',
         borderRadius: '8px',
@@ -113,10 +112,10 @@ const styles = {
         transition: 'all 0.2s ease'
     },
     activeTab: {
-        backgroundColor: '#9900ff'
+        backgroundColor: '#7C3AED' // bg-purple-600
     },
     contentContainer: {
-        backgroundColor: '#343434',
+        backgroundColor: '#111827', // bg-gray-900 (darker)
         borderRadius: '8px',
         padding: '24px'
     }

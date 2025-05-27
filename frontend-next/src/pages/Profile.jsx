@@ -32,55 +32,46 @@ const Profile = () => {
     }, []);
 
     if (error) {
-        return <div style={styles.error}>{error}</div>;
+        return <div className="text-center p-4 bg-red-900 text-red-100 rounded-lg">{error}</div>;
     }
 
     if (!user) {
-        return <div style={styles.loading}>Ładowanie danych użytkownika...</div>;
+        return <div className="text-center p-4">Ładowanie danych użytkownika...</div>;
     }
 
     return (
-        <div style={styles.container}>
-            <h1 style={styles.header}>Profil użytkownika</h1>
-            <div style={styles.profileBox}>
-                <p><strong>Imię:</strong> {user.firstName}</p>
-                <p><strong>Nazwisko:</strong> {user.lastName}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>Rola:</strong> {user.role}</p>
+        <div className="container mx-auto p-4 bg-gray-900 text-gray-100">
+            <div className="max-w-2xl mx-auto">
+                <h1 className="text-2xl font-bold mb-6 text-center">Profil użytkownika</h1>
+                
+                <div className="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <div className="space-y-4">
+                        <div className="flex flex-col md:flex-row md:items-center border-b border-gray-700 pb-4">
+                            <span className="text-gray-400 md:w-1/4">Imię:</span>
+                            <span className="font-medium md:w-3/4">{user.firstName}</span>
+                        </div>
+                        
+                        <div className="flex flex-col md:flex-row md:items-center border-b border-gray-700 pb-4">
+                            <span className="text-gray-400 md:w-1/4">Nazwisko:</span>
+                            <span className="font-medium md:w-3/4">{user.lastName}</span>
+                        </div>
+                        
+                        <div className="flex flex-col md:flex-row md:items-center border-b border-gray-700 pb-4">
+                            <span className="text-gray-400 md:w-1/4">Email:</span>
+                            <span className="font-medium md:w-3/4">{user.email}</span>
+                        </div>
+                        
+                        <div className="flex flex-col md:flex-row md:items-center">
+                            <span className="text-gray-400 md:w-1/4">Rola:</span>
+                            <span className="font-medium md:w-3/4">
+                                {user.role === 'ADMIN' ? 'Administrator' : 'Pracownik'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
-};
-
-const styles = {
-    container: {
-        padding: '20px',
-        maxWidth: '600px',
-        margin: '0 auto',
-        backgroundColor: '#2a2828',
-        color: 'white',
-        borderRadius: '8px',
-    },
-    header: {
-        textAlign: 'center',
-        color: '#fff',
-    },
-    profileBox: {
-        padding: '20px',
-        backgroundColor: '#3a3a3a',
-        borderRadius: '8px',
-        lineHeight: '1.8',
-    },
-    loading: {
-        color: 'white',
-        textAlign: 'center',
-        padding: '20px'
-    },
-    error: {
-        color: 'red',
-        textAlign: 'center',
-        padding: '20px'
-    }
 };
 
 export default Profile;
