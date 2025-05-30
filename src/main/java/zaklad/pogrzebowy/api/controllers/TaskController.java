@@ -71,41 +71,26 @@ public class TaskController {
         }
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody Map<String, String> updates) {
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
         try {
-            Optional<Task> taskOpt = taskService.findById(id);
-            if (taskOpt.isEmpty()) {
+            Optional<Task> existingTaskOpt = taskService.findById(id);
+            if (existingTaskOpt.isEmpty()) {
                 return ResponseEntity.notFound().build();
             }
 
-            Task task = taskOpt.get();
+            Task taskToUpdate = taskDTO.toEntity(); // Konwertuj DTO do encji
+            taskToUpdate.setId(id); // Ustaw ID z URL
 
-            // Handle partial update - only status
-            if (updates.containsKey("status")) {
-                try {
-                    String newStatus = updates.get("status").toLowerCase(); // Convert to lowercase
-                    System.out.println("Attempting to update status to: " + newStatus); // Debug log
-                    
-                    // Validate the status is a valid enum value
-                    Task.Status status = Task.Status.valueOf(newStatus);
-                    task.setStatus(status);
-                    
-                    Task updatedTask = taskService.update(id, task);
-                    return ResponseEntity.ok(new TaskDTO(updatedTask));
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Invalid status value: " + updates.get("status")); // Debug log
-                    e.printStackTrace();
-                    return ResponseEntity.badRequest().body(null);
-                }
-            }
-
-            return ResponseEntity.badRequest().body(null);
+            Task updated = taskService.update(id, taskToUpdate);
+            return ResponseEntity.ok(new TaskDTO(updated));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
