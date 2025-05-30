@@ -80,11 +80,11 @@
 
 		<!-- MySQL Connector -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.33</version>  <!-- Upewnij się, że masz poprawną wersję -->
-			<scope>runtime</scope>
+		  <groupId>org.postgresql</groupId>
+		  <artifactId>postgresql</artifactId>
+		  <version>42.7.3</version>
 		</dependency>
+
 
 		<!-- PDF -->
 
