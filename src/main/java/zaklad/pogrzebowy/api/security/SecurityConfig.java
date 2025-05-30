@@ -40,17 +40,18 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                       
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/users/**").permitAll()
-                        .requestMatchers("/tasks/assigned").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/tasks/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/clients/**").authenticated()
-                        .requestMatchers("/users/me").authenticated()
-                        .requestMatchers("/reports/**").authenticated()
-                        .requestMatchers("/api/task-report").authenticated()
-                        .anyRequest().authenticated()
-                )
+        .requestMatchers("/auth/**").permitAll()
+        .requestMatchers("/users/**").permitAll()
+        .requestMatchers("/tasks/assigned").hasAnyRole("USER", "ADMIN")
+        .requestMatchers("/tasks/**").hasAnyRole("USER", "ADMIN")
+        .requestMatchers("/clients/**").authenticated()
+        .requestMatchers("/users/me").authenticated()
+        .requestMatchers("/reports/**").authenticated()
+        .requestMatchers("/api/task-report").authenticated()
+        .anyRequest().authenticated()
+)
+
+                
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
