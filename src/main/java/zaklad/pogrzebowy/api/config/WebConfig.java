@@ -1,4 +1,4 @@
-package zaklad.pogrzebowy.api.config;
+/*package zaklad.pogrzebowy.api.config;
 
 
 
@@ -16,3 +16,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*");
     }
 }
+*/
