@@ -340,52 +340,52 @@ const filteredTasks = tasks.filter(task => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSaveChanges = async () => {
-    const token = localStorage.getItem("token");
-  
-    try {
-      // Format the date properly if it exists
-      const formattedDueDate = formData.dueDate ? 
-        new Date(formData.dueDate).toISOString() : null;
+ const handleSaveChanges = async () => {
+  const token = localStorage.getItem("token");
 
-      const taskData = {
-        id: editingTask.id, // Include the ID
-        taskName: formData.taskName,
-        description: formData.description,
-        priority: formData.priority,
-        status: formData.status,
-        dueDate: formattedDueDate,
-        order: formData.orderId ? { id: parseInt(formData.orderId) } : null,
-        assignedUser: formData.employeeId ? { id: parseInt(formData.employeeId) } : null
-      };
+  try {
+    const formattedDueDate = formData.dueDate
+      ? new Date(formData.dueDate).toISOString()
+      : null;
 
-      console.log('Sending task update:', taskData); // Debug log
+    const taskData = {
+      id: editingTask.id,
+      taskName: formData.taskName,
+      description: formData.description,
+      priority: formData.priority,
+      status: formData.status,
+      dueDate: formattedDueDate,
+      order: formData.orderId ? { id: parseInt(formData.orderId) } : null,
+      assignedUser: formData.employeeId ? { id: parseInt(formData.employeeId) } : null
+    };
 
-      const res = await fetch(`http://localhost:8080/tasks/${editingTask.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(taskData)
-      });
+    console.log("Zapisuję zmiany:", taskData);
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error('Server response:', errorText);
-        throw new Error(`Failed to update task: ${res.status} ${errorText}`);
-      }
-      
-      const updatedTask = await res.json();
-      setTasks(prev => prev.map(task => 
-        task.id === updatedTask.id ? updatedTask : task
-      ));
-      handleCancelEdit();
-    } catch (err) {
-      console.error("Error updating task:", err);
-      alert(`Error updating task: ${err.message}`);
+    const res = await fetch(`http://localhost:8080/tasks/${editingTask.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(taskData)
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("Błąd zapisu:", errorText);
+      throw new Error(`Nie udało się zaktualizować zadania: ${res.status}`);
     }
+
+    // Odśwież listę po edycji
+    await fetchTasks();
+    handleCancelEdit();
+  } catch (err) {
+    console.error("Błąd edycji zadania:", err);
+    alert(`Błąd zapisu zadania: ${err.message}`);
+  }
 };
+
+
 
   const handleCancelEdit = () => {
     setEditingTask(null);
