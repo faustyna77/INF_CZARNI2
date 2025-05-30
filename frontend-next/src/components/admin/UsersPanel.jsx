@@ -65,37 +65,70 @@ const UsersPanel = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSaveChanges = async () => {
-        try {
-            const token = localStorage.getItem("token");
-            const url = editingUser 
-                ? `http://localhost:8080/users/${editingUser.id}`
-                : 'http://localhost:8080/users';
-            
-            const response = await fetch(url, {
-                method: editingUser ? 'PUT' : 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(formData)
-            });
+   const handleSaveChanges = async () => {
+    try {
+        const token = localStorage.getItem("token");
+        const url = editingUser 
+            ? `http://localhost:8080/users/${editingUser.id}`
+            : 'http://localhost:8080/users';
 
-            if (!response.ok) throw new Error(`Failed to ${editingUser ? 'update' : 'create'} user`);
-            
-            const updatedUser = await response.json();
-            
-            if (editingUser) {
-                setUsers(users.map(user => user.id === updatedUser.id ? updatedUser : user));
-            } else {
-                setUsers([...users, updatedUser]);
-            }
-            
-            handleCancelEdit();
-        } catch (err) {
-            setError(err.message);
+        const userToSend = {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            role: formData.role,
+            ...(formData.password && { passwordHash: formData.password })
+        };
+
+        console.log("📦 Dane wysyłane do backendu:", userToSend);
+
+        const response = await fetch(url, {
+            method: editingUser ? 'PUT' : 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(userToSend)
+        });
+
+        if (!response.ok) throw new Error(`Failed to ${editingUser ? 'update' : 'create'} user`);
+
+        const updatedUser = await response.json();
+
+        if (editingUser) {
+            setUsers(users.map(user => user.id === updatedUser.id ? updatedUser : user));
+        } else {
+            setUsers([...users, updatedUser]);
         }
-    };
+
+        handleCancelEdit();
+    } catch (err) {
+        setError(err.message);
+    }
+};
+
+
+    const handleImmediateDelete = async (userId) => {
+    const confirmDelete = window.confirm('Czy na pewno chcesz usunąć tego użytkownika?');
+    if (!confirmDelete) return;
+
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`http://localhost:8080/users/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) throw new Error('Nie udało się usunąć użytkownika.');
+
+        setUsers(users.filter(user => user.id !== userId));
+    } catch (error) {
+        alert(error.message);
+        console.error("Błąd usuwania:", error);
+    }
+};
 
     const handleDeleteUser = async () => {
         const confirm = window.confirm('Czy na pewno chcesz usunąć tego użytkownika?');
@@ -155,10 +188,20 @@ const UsersPanel = () => {
                             <td style={styles.td}>{user.email}</td>
                             <td style={styles.td}>{user.role}</td>
                             <td style={styles.td}>
-                                <button style={styles.button} onClick={() => handleEditClick(user)}>
-                                    Edytuj dane
-                                </button>
+                                <td style={styles.td}>
+    <button style={styles.button} onClick={() => handleEditClick(user)}>
+        Edytuj
+    </button>
+    <button 
+        style={styles.deleteButton}
+        onClick={() => handleImmediateDelete(user.id)}
+    >
+        Usuń
+    </button>
+</td>
+
                             </td>
+                            
                         </tr>
                     ))}
                 </tbody>
