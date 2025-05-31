@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: springboot-backend
+    env: java
+    buildCommand: ./mvnw package
+    startCommand: java -jar target/api_pokemon-0.0.1-SNAPSHOT.jar
+    plan: free
+    region: frankfurt
+    branch: main
+    rootDir: .
