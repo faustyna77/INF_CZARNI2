@@ -3,6 +3,19 @@ services:
     name: springboot-backend
     runtime: docker
     plan: free
-    region: frankfurt
     branch: main
     rootDir: .
+    region: frankfurt
+    envVars:
+      - key: PGHOST
+        value: postgres.railway.internal
+      - key: PGPORT
+        value: "5432"
+      - key: PGUSER
+        value: postgres
+      - key: PGPASSWORD
+        value: ZtdreJBzZEvwavRTYnJMzTkLUndiovJI
+      - key: PGDATABASE
+        value: railway
+      - key: PORT
+        value: "8080"  # ❗️Spring Boot będzie nasłuchiwał na tym porcie
