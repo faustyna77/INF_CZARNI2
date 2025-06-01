@@ -3,19 +3,19 @@ services:
     name: springboot-backend
     runtime: docker
     plan: free
+    region: frankfurt
     branch: main
     rootDir: .
-    region: frankfurt
     envVars:
       - key: PGHOST
-        value: postgres.railway.internal
+        value: shortline.proxy.rlwy.net          # PUBLICZNY adres hosta Railway
       - key: PGPORT
-        value: "5432"
+        value: "32783"                            # PUBLICZNY port z DATABASE_PUBLIC_URL
       - key: PGUSER
         value: postgres
       - key: PGPASSWORD
-        value: ZtdreJBzZEvwavRTYnJMzTkLUndiovJI
+        value: ZtdreJBzZEvwavRTYnJMzTkLUndiovJI   # Hasło z Railway
       - key: PGDATABASE
-        value: railway
+        value: railway                            # Nazwa bazy (sprawdź w Railway)
       - key: PORT
-        value: "8080"  # ❗️Spring Boot będzie nasłuchiwał na tym porcie
+        value: "8080"                             # Port aplikacji (domyślny Spring Boot)
