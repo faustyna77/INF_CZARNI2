@@ -63,7 +63,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
                 "http://localhost:5173",  // lokalne dev
-                "https://twoja-nazwa.netlify.app"  // jeśli frontend jest na Netlify
+                "https://funeralhomev2.netlify.app"  // jeśli frontend jest na Netlify
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
